@@ -47,4 +47,13 @@ public class Session : MonoSingleton<Session> {
 	public void NewUser() {
 		Application.LoadLevel("NewUser");
 	}
+
+	public void ViewUser() {
+		Application.LoadLevel("Trial");
+		//Application.LoadLevel("ViewUser");
+	}
+
+	public void Trial() {
+		Application.LoadLevel("Trial");
+	}
 }

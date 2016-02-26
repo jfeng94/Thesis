@@ -47,7 +47,8 @@ public class HomeScreen : MonoBehaviour {
 		Session.instance.NewUser();
 	}
 
-	public void LogIn() {
-
+	public void ViewUser() {
+		Session.instance.user = userList.options[userList.value].text;
+		Session.instance.ViewUser();
 	}
 }
