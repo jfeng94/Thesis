@@ -1,29 +1,84 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class Trial : MonoBehaviour {
-	SceneInteractable sceneObject = null;
+	SceneObject sceneObject = null;
 	SceneTarget       sceneTarget = null;
+
+	bool proximity = false;
+
 	// Use this for initialization
 	void Start () {
-		// Create sceneobject and scenetarget and hoops
-		string siPath = "Prefabs/SceneInteractable";
-		GameObject go = Instantiate(Resources.Load(siPath),
-			            Vector3.zero,
-			            Quaternion.identity) as GameObject;
-		sceneObject   = go.GetComponent<SceneInteractable>() as SceneInteractable;
 
-		if (sceneObject != null) {
-			// Give it a random position and orientation.
-			sceneObject.transform.position = new Vector3(Random.Range(-23f, 23f),
-														 Random.Range(  2f, 23f),
-														 Random.Range(  2f, 23f));
-			sceneObject.transform.rotation = Random.rotation;
-		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (Input.GetKeyDown("space")) {
+			CreateSceneObject();
+			CreateSceneTarget();
+		}
+
+		if (sceneTarget != null && sceneObject != null) {
+			if ((euclideanDist(sceneObject, sceneTarget)) < 1f && !proximity) {
+				sceneTarget.EnteredProximity();
+				proximity = true;
+			}
+			else if ((euclideanDist(sceneObject, sceneTarget)) > 1f &&proximity) {
+				sceneTarget.LeftProximity();
+				proximity = false;
+			}
+		}
+	}
+
+	// Create SceneObject
+	private void CreateSceneObject() {
+		if (sceneObject != null) {
+			Destroy(sceneObject.gameObject);
+		}
+
+		// Create sceneObject
+		string siPath = "Prefabs/SceneObject";
+		GameObject go = Instantiate(Resources.Load(siPath),
+			            Vector3.zero,
+			            Quaternion.identity) as GameObject;
+		sceneObject   = go.GetComponent<SceneObject>() as SceneObject;
+
+		if (sceneObject != null) {
+			// Give it a random position and orientation.
+ 			sceneObject.transform.position = new Vector3(UnityEngine.Random.Range(-20f, 20f),
+														 UnityEngine.Random.Range(  2f, 20f),
+														 UnityEngine.Random.Range(  7f, 23f));
+			sceneObject.transform.rotation = UnityEngine.Random.rotation;
+		}
+	}
+
+	private void CreateSceneTarget() {
+		if (sceneTarget != null) {
+			Destroy(sceneTarget.gameObject);
+		}
+
+		// Create sceneTarget
+		string stPath = "Prefabs/SceneTarget";
+		GameObject go = Instantiate(Resources.Load(stPath),
+			            Vector3.zero,
+			            Quaternion.identity) as GameObject;
+		sceneTarget   = go.GetComponent<SceneTarget>() as SceneTarget;
+
+		if (sceneTarget != null) {
+			// Give it a random position and orientation.
+			sceneTarget.transform.position = new Vector3(UnityEngine.Random.Range(-20f, 20f),
+														 UnityEngine.Random.Range(  2f, 20f),
+														 UnityEngine.Random.Range(  7f, 23f));
+			sceneTarget.transform.rotation = UnityEngine.Random.rotation;
+		}
+	}
+
+	private float euclideanDist(SceneObject tar, SceneTarget obj) {
+		Vector3 dist = tar.transform.position - obj.transform.position;
+		float d = (float) Math.Sqrt(dist.x * dist.x + dist.y * dist.y + dist.z * dist.z);
+
+		return d;
 	}
 }

@@ -19,8 +19,8 @@ public class HandStream : MonoBehaviour {
 	//////////////////
 	public GameObject scene = null;
 
-	private SceneInteractable target = null;
-	private SceneInteractable touch  = null;
+	private SceneObject target = null;
+	private SceneObject touch  = null;
 
 	private Vector3    lastPos = Vector3.zero;
 	private Quaternion lastRot = Quaternion.identity;
@@ -94,9 +94,9 @@ public class HandStream : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		SceneInteractable si = other.gameObject.
-		                       GetComponent<SceneInteractable>()
-		                       as SceneInteractable;
+		SceneObject si = other.gameObject.
+		                       GetComponent<SceneObject>()
+		                       as SceneObject;
 		if (si != null) {
 			touch = si;
 			touch.Highlight();

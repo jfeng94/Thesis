@@ -45,6 +45,72 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\PrimitivesPro\Scripts\CSG\CSG.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\CSG\CSGNode.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\CSG\CSGPlane.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\CSG\CSGPolygon.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\CSG\CSGVertex.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\CSG\VertexHash.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Demo\ButtonTrigger.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Demo\CutterDemo.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Demo\CutterTest.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Demo\PrimitivesDemo.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Arc.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\ArcGizmo.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\BaseObject.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\BooleanOp.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Box.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Capsule.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Circle.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Cone.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\CuttingPlane.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Cylinder.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\DefaultObject.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Ellipse.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Ellipsoid.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\GeoSphere.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\MeshEditorObject.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\PlaneObject.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Pyramid.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Ring.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\RoundedCube.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Sphere.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\SphericalCone.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\SuperEllispoid.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Torus.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\TorusKnot.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Triangle.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\GameObjects\Tube.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\MeshCutting\ArrayDictionary.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\MeshCutting\Contour.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\MeshCutting\IntersectionData.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\MeshCutting\LSHash.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\MeshCutting\MeshCutter.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\MeshCutting\Polygon.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\MeshEditor\PPMesh.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\MeshEditor\UndoSystem.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\ArcPrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\BoxPrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\CapsulePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\ConePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\EllipsePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\EllipsoidPrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\GeoSpherePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\HollowConePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\PlanePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\PrimitivePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\PyramidPrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\RingPrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\SpherePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\SphericalConePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\SuperEllipsoidPrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\TorusKnotPrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\TorusPrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\TrianglePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Primitives\TubePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Utils\ObjExporter.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Utils\Plane.cs" />
+     <Compile Include="Assets\PrimitivesPro\Scripts\Utils\Utils.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\HomeScreen.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\MonoSingleton.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\NewUserScreen.cs" />
@@ -53,7 +119,7 @@
      <Compile Include="Assets\Scripts\SceneControllers\Trial.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\ViewUser.cs" />
      <Compile Include="Assets\Scripts\UI\HandStream.cs" />
-     <Compile Include="Assets\Scripts\UI\SceneInteractable.cs" />
+     <Compile Include="Assets\Scripts\UI\SceneObject.cs" />
      <Compile Include="Assets\Scripts\UI\SceneTarget.cs" />
      <Compile Include="Assets\SixenseInput\DemoScenes\Scripts\SixenseHand.cs" />
      <Compile Include="Assets\SixenseInput\DemoScenes\Scripts\SixenseHandsController.cs" />
@@ -80,6 +146,9 @@
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>C:/Program Files/Unity_5.3.1f/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="P2T">
+ <HintPath>C:/Users/Jerry Feng/Documents/Thesis/Thesis/Assets/PrimitivesPro/Scripts/Triangulation/P2T.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

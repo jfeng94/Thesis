@@ -45,6 +45,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\PrimitivesPro\Editor\3rd\MiniJSON.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\MenuDefinition.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\MeshEditor\FeedbackWindow.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\MeshEditor\Grid.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\MeshEditor\HelpWindow.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\MeshEditor\MeshEditor.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\MeshEditor\MeshEditorSettings.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\MeshEditor\SettingsWindow.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\ArcGizmoEditor.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateArc.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateBooleanOp.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateBox.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateCapsule.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateCircle.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateCone.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateCuttingPlane.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateCylinder.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateEllipse.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateEllipsoid.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateGeoSphere.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreatePlane.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreatePrimitive.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreatePyramid.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateRing.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateRoundedCube.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateSphere.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateSphericalCone.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateSuperEllipsoid.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateTorus.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateTorusKnot.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateTriangle.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CreateTube.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Primitives\CustomDefaultObject.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Toolbar.cs" />
+     <Compile Include="Assets\PrimitivesPro\Editor\Utils.cs" />
      <Compile Include="Assets\UI Samples\Scripts\Editor\AlphaNumericSort.cs" />
      <Compile Include="Assets\UI Samples\Scripts\Editor\GUIHierarchy.cs" />
      <None Include="Assets\UI Samples\Fonts\Jupiter\LICENSE.txt" />
@@ -82,6 +117,9 @@
  </Reference>
  <Reference Include="UnityEditor.OSXStandalone.Extensions">
  <HintPath>C:/Program Files/Unity_5.3.1f/Editor/Data/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="P2T">
+ <HintPath>C:/Users/Jerry Feng/Documents/Thesis/Thesis/Assets/PrimitivesPro/Scripts/Triangulation/P2T.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
