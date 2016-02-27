@@ -50,9 +50,11 @@
      <Compile Include="Assets\Scripts\SceneControllers\NewUserScreen.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\Session.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\StartUp.cs" />
+     <Compile Include="Assets\Scripts\SceneControllers\Trial.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\ViewUser.cs" />
      <Compile Include="Assets\Scripts\UI\HandStream.cs" />
      <Compile Include="Assets\Scripts\UI\SceneInteractable.cs" />
+     <Compile Include="Assets\Scripts\UI\SceneTarget.cs" />
      <Compile Include="Assets\SixenseInput\DemoScenes\Scripts\SixenseHand.cs" />
      <Compile Include="Assets\SixenseInput\DemoScenes\Scripts\SixenseHandsController.cs" />
      <Compile Include="Assets\SixenseInput\DemoScenes\Scripts\SixenseInputTest.cs" />
