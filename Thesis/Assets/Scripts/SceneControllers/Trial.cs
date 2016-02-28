@@ -6,6 +6,8 @@ public class Trial : MonoBehaviour {
 	SceneObject sceneObject = null;
 	SceneTarget       sceneTarget = null;
 
+	public HandStream  hs = null;
+
 	bool proximity = false;
 
 	// Use this for initialization
@@ -15,9 +17,11 @@ public class Trial : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown("space")) {
-			CreateSceneObject();
-			CreateSceneTarget();
+		if (hs.hydra != null) {
+			if (hs.hydra.GetButtonDown(SixenseButtons.BUMPER)) {
+				CreateSceneObject();
+				CreateSceneTarget();
+			}
 		}
 
 		if (sceneTarget != null && sceneObject != null) {

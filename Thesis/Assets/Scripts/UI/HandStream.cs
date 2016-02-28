@@ -6,7 +6,7 @@ public class HandStream : MonoBehaviour {
 	///////////
 	// HYDRA //
 	///////////
-	private SixenseInput.Controller hydra = null;
+	public SixenseInput.Controller hydra = null;
 
 	/////////////////
 	// CALIBRATION //
@@ -39,6 +39,7 @@ public class HandStream : MonoBehaviour {
 		}
 
 		if (hydra == null) {
+			Debug.Log("Hydra not connected???");
 			return;
 		}
 
