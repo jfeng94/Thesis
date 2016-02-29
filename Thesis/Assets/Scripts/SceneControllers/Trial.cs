@@ -4,7 +4,8 @@ using System.Collections;
 
 public class Trial : MonoBehaviour {
 	SceneObject sceneObject = null;
-	SceneTarget       sceneTarget = null;
+	SceneTarget sceneTarget = null;
+	Hoop        hoop        = null;     
 
 	public HandStream  hs = null;
 
@@ -21,6 +22,7 @@ public class Trial : MonoBehaviour {
 			if (hs.hydra.GetButtonDown(SixenseButtons.BUMPER)) {
 				CreateSceneObject();
 				CreateSceneTarget();
+				CreateHoop();
 			}
 		}
 
@@ -77,6 +79,28 @@ public class Trial : MonoBehaviour {
 														 UnityEngine.Random.Range(  7f, 23f));
 			sceneTarget.transform.rotation = UnityEngine.Random.rotation;
 		}
+	}
+
+	private void CreateHoop() {
+		if (hoop != null) {
+			Destroy(hoop.gameObject);
+		}
+
+		// Create sceneObject
+		string hPath = "Prefabs/Hoop";
+		GameObject go = Instantiate(Resources.Load(hPath),
+			            Vector3.zero,
+			            Quaternion.identity) as GameObject;
+		hoop          = go.GetComponent<Hoop>() as Hoop;
+
+		if (hoop != null) {
+			// Give it a random position and orientation.
+ 			hoop.transform.position = new Vector3(UnityEngine.Random.Range(-20f, 20f),
+												  UnityEngine.Random.Range(  2f, 20f),
+												  UnityEngine.Random.Range(  7f, 23f));
+			hoop.transform.rotation = UnityEngine.Random.rotation;
+		}
+
 	}
 
 	private float euclideanDist(SceneObject tar, SceneTarget obj) {
