@@ -118,6 +118,7 @@
      <Compile Include="Assets\Scripts\SceneControllers\StartUp.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\Trial.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\ViewUser.cs" />
+     <Compile Include="Assets\Scripts\Trial Components\CalibrateBox.cs" />
      <Compile Include="Assets\Scripts\Trial Components\DoTouch.cs" />
      <Compile Include="Assets\Scripts\Trial Components\DontTouch.cs" />
      <Compile Include="Assets\Scripts\Trial Components\HandStream.cs" />

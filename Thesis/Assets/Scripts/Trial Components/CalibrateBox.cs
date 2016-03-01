@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SceneObject : MonoBehaviour {
+public class CalibrateBox : MonoBehaviour {
 	public void Highlight() {
 		Material m = Resources.Load("Materials/ObjectHighlight") as Material;
 		if (m != null) {

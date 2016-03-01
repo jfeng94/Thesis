@@ -18,9 +18,12 @@ public class HandStream : MonoBehaviour {
 	// INTERACTIONS //
 	//////////////////
 	public GameObject scene = null;
+	public Trial      trial = null;
 
 	private SceneObject target = null;
 	private SceneObject touch  = null;
+
+	private CalibrateBox calibrateBox = null;
 
 	private Vector3    lastPos = Vector3.zero;
 	private Quaternion lastRot = Quaternion.identity;
@@ -32,21 +35,30 @@ public class HandStream : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		// Try to connect hydra if not already.
 		if (hydra == null) {
-			if (SixenseInput.IsBaseConnected(0) != false) {
-				hydra = SixenseInput.Controllers[0];
+			ConnectHydra();
+			if (hydra == null) {
+				Debug.Log("Hydra not connected???");
+				return;
 			}
 		}
 
-		if (hydra == null) {
-			Debug.Log("Hydra not connected???");
-			return;
+		MoveHand();
+		ReadButtonStatus();
+
+	}
+
+	private void ConnectHydra() {
+		if (SixenseInput.IsBaseConnected(0) != false) {
+			hydra = SixenseInput.Controllers[0];
 		}
+	}
 
-
-		/////////////////////////////////////////////////////////////////
-		// MOVE HAND
-		/////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////
+	// MOVE HAND
+	/////////////////////////////////////////////////////////////////
+	public void MoveHand() {
 		if (hydra.Enabled != false) {
 
 			// Scale input to our room size with the calibration offset.
@@ -71,14 +83,20 @@ public class HandStream : MonoBehaviour {
 			transform.position = pos;
 			transform.rotation = hydra.Rotation;
 		}
+	}
 
-		/////////////////////////////////////////////////////////////////
-		// HYDRA BUTTONS
-		/////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////
+	// HYDRA BUTTONS
+	/////////////////////////////////////////////////////////////////
+	private void ReadButtonStatus() {
 		if (hydra.GetButtonDown(SixenseButtons.TRIGGER)) {
 			if (touch != null) {
 				target = touch;
 				target.transform.parent = transform;
+				trial.CheckFirstGrab();
+			}
+			if (calibrateBox != null) {
+				trial.EndCalibration();
 			}
 		}
 
@@ -86,6 +104,7 @@ public class HandStream : MonoBehaviour {
 			if (target != null) {
 				target.transform.parent = scene.transform;
 				target = null;
+				trial.CheckCompletion();
 			}
 		}
 
@@ -94,6 +113,21 @@ public class HandStream : MonoBehaviour {
 		}
 	}
 
+
+	public int TriggerStatus() {
+		if (hydra == null) {
+			return 0;
+		}
+
+		if (hydra.GetButton(SixenseButtons.TRIGGER)) {
+			return 1;
+		}
+		return 0;
+	}
+
+	/////////////////////////////////////////////////////////////////
+	// COLLIDER METHODS
+	/////////////////////////////////////////////////////////////////
 	void OnTriggerEnter(Collider other) {
 		SceneObject si = other.gameObject.
 		                       GetComponent<SceneObject>()
@@ -102,12 +136,26 @@ public class HandStream : MonoBehaviour {
 			touch = si;
 			touch.Highlight();
 		}
+
+		CalibrateBox cb =  other.gameObject.
+		                         GetComponent<CalibrateBox>()
+		                         as CalibrateBox;
+
+		if (cb != null) {
+			calibrateBox = cb;
+			calibrateBox.Highlight();
+		}
 	}
 
 	void OnTriggerExit(Collider other) {
 		if (touch != null) {
 			touch.Unhighlight();
 			touch = null;
+		}
+
+		if (calibrateBox != null) {
+			calibrateBox.Unhighlight();
+			calibrateBox = null;
 		}
 	}
 }
