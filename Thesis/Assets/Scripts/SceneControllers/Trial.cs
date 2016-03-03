@@ -4,10 +4,13 @@ using System.Text;
 using System.Collections;
 
 public class Trial : MonoBehaviour {
-	SceneObject  sceneObject  = null;
-	SceneTarget  sceneTarget  = null;
-	Hoop         hoop         = null;  
-	CalibrateBox calibrateBox = null;   
+	private SceneObject  sceneObject  = null;
+	private SceneTarget  sceneTarget  = null;
+	private Hoop         hoop         = null;  
+	private CalibrateBox calibrateBox = null;
+	private TouchMe      touchMe      = null; 
+
+	private int calibrateNum = 0;
 
 	public HandStream  hs = null;
 
@@ -15,6 +18,9 @@ public class Trial : MonoBehaviour {
 	bool running   = false;
 	bool firstGrab = false;
 
+	////////////////////////////////////////////////////////////////////////////
+	// Data to keep track of per trial
+	////////////////////////////////////////////////////////////////////////////
 	private float minHoopDist   = float.PositiveInfinity;
 	private float minTargDist   = float.PositiveInfinity;
 	private float minHoopTime   = float.PositiveInfinity;
@@ -27,6 +33,7 @@ public class Trial : MonoBehaviour {
 	private int frame = 0;
 
 	private int trialNum = 0;
+
 	// Use this for initialization
 	void Start () {
 		BeginCalibration();
@@ -221,6 +228,67 @@ public class Trial : MonoBehaviour {
 	public void BeginCalibration() {
 		if (calibrateBox != null) {
 			Destroy(calibrateBox.gameObject);
+		}
+		if (touchMe != null) {
+			Destroy(touchMe.gameObject);
+		}
+
+		TouchMe();
+	}
+
+	public void TouchMe() {
+		Debug.Log("asdlfkasldkfjlaksdfjkldf");
+		if (calibrateBox != null) {
+			Destroy(calibrateBox.gameObject);
+		}
+		if (touchMe != null) {
+			Destroy(touchMe.gameObject);
+		}
+
+		// Create sceneObject
+		string tmPath = "Prefabs/TouchMe";
+		GameObject go = Instantiate(Resources.Load(tmPath),
+			            Vector3.zero,
+			            Quaternion.identity) as GameObject;
+		touchMe       = go.GetComponent<TouchMe>() as TouchMe;
+
+		if (touchMe != null) {
+			Vector3 pos = Vector3.zero;
+			switch (calibrateNum) {
+				case (0):
+					pos = new Vector3(23.5f, 1.5f, 23.5f);
+					break;
+
+				case (1):
+					pos = new Vector3(-23.5f, 1.5f, 23.5f);
+					break;
+
+				case (2):
+					pos = new Vector3(23.5f, 23.5f, 23.5f);
+					break;
+
+				case (3):
+					pos = new Vector3(-23.5f, 23.5f, 23.5f);
+					break;
+
+				case (4):
+					LoadCalibrationBox();
+					return;
+
+			}
+ 			touchMe.transform.position = pos;
+			touchMe.transform.rotation = Quaternion.identity;
+			calibrateNum++;
+		}
+
+	}
+
+	public void LoadCalibrationBox() {
+		if (calibrateBox != null) {
+			Destroy(calibrateBox.gameObject);
+		}
+		if (touchMe != null) {
+			Destroy(touchMe.gameObject);
 		}
 
 		// Create sceneObject

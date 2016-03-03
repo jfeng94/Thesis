@@ -145,6 +145,14 @@ public class HandStream : MonoBehaviour {
 			calibrateBox = cb;
 			calibrateBox.Highlight();
 		}
+
+		TouchMe tm = other.gameObject.
+		                   GetComponent<TouchMe>()
+		                   as TouchMe;
+
+		if (tm != null) {
+			trial.TouchMe();
+		}
 	}
 
 	void OnTriggerExit(Collider other) {
