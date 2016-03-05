@@ -76,6 +76,8 @@ public class NewUserScreen : MonoBehaviour {
         	// Add some information to the file.
         	fs.Write(info, 0, info.Length);
         }
+
+        Session.instance.Home();
 	}
 
 	public void UpdateCAD() {

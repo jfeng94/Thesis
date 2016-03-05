@@ -11,12 +11,8 @@ public class ViewUser : MonoBehaviour {
 		userWhite.text = "Welcome back\n" + Session.instance.user;
 		userBlack.text = "Welcome back\n" + Session.instance.user;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
+	//
 	public void Trial() {
 		Session.instance.Trial();
 	}

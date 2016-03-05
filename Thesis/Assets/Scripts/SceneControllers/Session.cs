@@ -40,6 +40,12 @@ public class Session : MonoSingleton<Session> {
 		}
 	}
 
+	public void SetUser(string s) {
+		user = s;
+
+		string path = this.thisUserPath
+	}
+
 	public void Home() {
 		Application.LoadLevel("Home");
 	}
@@ -49,7 +55,7 @@ public class Session : MonoSingleton<Session> {
 	}
 
 	public void ViewUser() {
-		Application.LoadLevel("Trial");
+		Application.LoadLevel("ViewUser");
 		//Application.LoadLevel("ViewUser");
 	}
 
