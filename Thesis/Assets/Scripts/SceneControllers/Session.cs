@@ -1,10 +1,17 @@
-﻿using UnityEngine;
+using UnityEngine;
+using System.IO;
 using System.Collections;
 
 public class Session : MonoSingleton<Session> {
+	//////////////////////////////////////////
+	// System preferences
+	//////////////////////////////////////////
+	public int    totalDays = 5;
+	public int    totalTrials = 20;
+
 	public string user  = null;
-	public int    day   = -1;
-	public int    trial = -1;
+	public int    day   = 0;
+	public int    trial = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -43,7 +50,21 @@ public class Session : MonoSingleton<Session> {
 	public void SetUser(string s) {
 		user = s;
 
-		string path = this.thisUserPath
+
+		// Figure out how many days this user has already participated in.
+		bool searchingDay = true;
+		while (searchingDay) {
+			string path = this.thisUserPath + "/Day" + day;
+			if (!Directory.Exists(path)) {
+				Directory.CreateDirectory(path);
+				searchingDay = false;
+			}
+			else {
+				
+			}
+
+			day++;
+		}
 	}
 
 	public void Home() {
@@ -56,7 +77,6 @@ public class Session : MonoSingleton<Session> {
 
 	public void ViewUser() {
 		Application.LoadLevel("ViewUser");
-		//Application.LoadLevel("ViewUser");
 	}
 
 	public void Trial() {

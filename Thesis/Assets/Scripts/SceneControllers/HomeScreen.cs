@@ -48,7 +48,7 @@ public class HomeScreen : MonoBehaviour {
 	}
 
 	public void ViewUser() {
-		Session.instance.user = userList.options[userList.value].text;
+		Session.instance.SetUser(userList.options[userList.value].text);
 		Session.instance.ViewUser();
 	}
 }
