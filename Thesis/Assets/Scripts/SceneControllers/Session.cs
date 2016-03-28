@@ -53,14 +53,33 @@ public class Session : MonoSingleton<Session> {
 
 		// Figure out how many days this user has already participated in.
 		bool searchingDay = true;
-		while (searchingDay) {
+		while (day <= totalDays) {
+			// Current day
 			string path = this.thisUserPath + "/Day" + day;
-			if (!Directory.Exists(path)) {
+
+			// Previous day's trial 20
+			string prev = this.thisUserPath + "/Day" + (day - 1) + "/Trial_20.txt";
+
+			// If this day's folder doesn't exist, but the previous day is completed
+			// (there is a trial 20)
+			if (!Directory.Exists(path) && !File.Exists(prev)) {
 				Directory.CreateDirectory(path);
-				searchingDay = false;
+
+				return;
+
 			}
-			else {
-				
+			// Else if the directory already exists, figure out what the last trial was.
+			else if (Directory.Exists(path)) {
+				// Cycle through all possible 
+				while (trial < totalTrials) {
+					string trialPath = this.thisUserPath + "/Day" + day + "/Trial_" + trial + ".txt";
+					if (!File.Exists(trialPath)) {
+						
+						return;
+					}
+
+					trial++;
+				}
 			}
 
 			day++;
