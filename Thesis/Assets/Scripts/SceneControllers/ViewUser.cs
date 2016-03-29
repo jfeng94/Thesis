@@ -16,11 +16,11 @@ public class ViewUser : MonoBehaviour {
 		userBlack.text = "Welcome back\n" + Session.instance.user;
 
 		StringBuilder info = new StringBuilder();
-		if (Session.instance.day > Session.instance.totalDays) {
+		if (Session.instance.day > Session.totalDays) {
 			info.Append("You're done with the trials!\n\n\nGet out.");
 		}
 		else {
-			info.Append("Day " + Session.instance.day);
+			info.Append("Day " + Session.instance.day + "\n");
 			if (Session.instance.trial != 0) {
 				info.Append("Continue where you left off -- Trial " + Session.instance.trial);
 			}

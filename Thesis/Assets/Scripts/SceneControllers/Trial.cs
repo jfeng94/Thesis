@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.IO;
 using System.Text;
 using System.Collections;
 
@@ -10,6 +11,9 @@ public class Trial : MonoBehaviour {
 	private CalibrateBox calibrateBox = null;
 	private TouchMe      touchMe      = null; 
 
+
+	private StreamWriter trialStream;
+	private StreamWriter summaryStream;
 	private int calibrateNum = 0;
 
 	public HandStream  hs = null;
@@ -29,6 +33,13 @@ public class Trial : MonoBehaviour {
 	private int   minTargFrame  = 0;
 	private float firstGrabTime = float.PositiveInfinity;
 
+	private Vector3    initSOPos   = Vector3.zero;
+	private Vector3    initSTPos   = Vector3.zero;
+	private Vector3    initHoopPos = Vector3.zero;
+	private Quaternion initSORot   = Quaternion.identity; 
+	private Quaternion initSTRot   = Quaternion.identity; 
+	private Quaternion initHoopRot = Quaternion.identity; 
+
 	private DateTime start;
 	private int frame = 0;
 
@@ -37,6 +48,7 @@ public class Trial : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		BeginCalibration();
+		summaryStream = File.AppendText(Session.instance.thisDayPath + "/summary.txt");
 	}
 	
 	// Update is called once per frame
@@ -55,6 +67,7 @@ public class Trial : MonoBehaviour {
 		if (running) {
 			UpdateMinDists();
 			string line = GetStateText();
+			trialStream.Write(line);
 			frame++;
 		}
 	}
@@ -88,6 +101,10 @@ public class Trial : MonoBehaviour {
 														 UnityEngine.Random.Range(  7f, 23f));
 			sceneObject.transform.rotation = UnityEngine.Random.rotation;
 		}
+
+		// Assign initial configuration items
+		initSOPos = sceneObject.transform.position;
+		initSORot = sceneObject.transform.rotation;
 	}
 
 	private void CreateSceneTarget() {
@@ -109,6 +126,9 @@ public class Trial : MonoBehaviour {
 														 UnityEngine.Random.Range(  7f, 23f));
 			sceneTarget.transform.rotation = UnityEngine.Random.rotation;
 		}
+
+		initSTPos = sceneTarget.transform.position;
+		initSTRot = sceneTarget.transform.rotation;
 	}
 
 	private void CreateHoop() {
@@ -130,7 +150,8 @@ public class Trial : MonoBehaviour {
 												  UnityEngine.Random.Range(  7f, 23f));
 			hoop.transform.rotation = UnityEngine.Random.rotation;
 		}
-
+		initHoopPos = hoop.transform.position;
+		initHoopRot = hoop.transform.rotation;
 	}
 
 	private void ResetMembers() {
@@ -200,9 +221,23 @@ public class Trial : MonoBehaviour {
 		line.Append("\t");												// Column 17: Minimum distance from sceneTarget achieved.
 
 		// 8. Time since trial began
-		line.Append((DateTime.Now - start).TotalSeconds);
+		line.Append((DateTime.Now - start).TotalSeconds);				// Column 18: Time since trial began
+		line.Append("\t");
 
-		line.Append("\n");
+		// 9. Scene Object Initial Configuration
+		AppendVector3(ref line, initSOPos);								// Column 19, 20, 21: SceneObject Pos
+		AppendQuaternion(ref line, initSORot);							// Column 22, 23, 24, 25: SceneObject rot
+		line.Append("\t");
+
+		// 10. SceneTarget Initial Configuration
+		AppendVector3(ref line, initSTPos);								// Column 26, 27, 28: SceneTarget Pos
+		AppendQuaternion(ref line, initSTRot);							// Column 29, 30, 31, 32: SceneTarget rot
+		line.Append("\t");
+
+		// 11. Hoop Initial Configuration
+		AppendVector3(ref line, initHoopPos);							// Column 33, 34, 35: Hoop Pos
+		AppendQuaternion(ref line, initHoopRot);						// Column 36, 37, 38, 39: Hoop rot
+		line.Append("\t");
 
 		return line.ToString();
 	}
@@ -210,7 +245,13 @@ public class Trial : MonoBehaviour {
 	public string GetSummaryText() {
 		StringBuilder line = new StringBuilder();
 
-		line.Append("Summary of Trial\t" + trialNum + "\n");
+		line.Append("Summary of Trial\t" + Session.instance.trial + "\n");
+		line.Append("Initial SO position:\t" + initSOPos.x + "\t" + initSOPos.y + "\t" + initSOPos.z + "\n"); 
+		line.Append("Initial SO rotation:\t" + initSORot.x + "\t" + initSORot.y + "\t" + initSORot.z + "\t" + initSORot.w + "\n");
+		line.Append("Initial ST position:\t" + initSTPos.x + "\t" + initSTPos.y + "\t" + initSTPos.z + "\n"); 
+		line.Append("Initial ST rotation:\t" + initSTRot.x + "\t" + initSTRot.y + "\t" + initSTRot.z + "\t" + initSTRot.w + "\n");
+		line.Append("Initial Hoop position:\t" + initHoopPos.x + "\t" + initHoopPos.y + "\t" + initHoopPos.z + "\n"); 
+		line.Append("Initial Hoop rotation:\t" + initHoopRot.x + "\t" + initHoopRot.y + "\t" + initHoopRot.z + "\t" + initHoopRot.w + "\n");
 		line.Append("Time to first grab:\t" + firstGrabTime + "\n");
 		line.Append("Time to hoop:\t" + minHoopTime + "\n");
 		line.Append("Time to target:\t" + minTargTime + "\n");
@@ -319,12 +360,9 @@ public class Trial : MonoBehaviour {
 		start = DateTime.Now;
 
 		// Create write out filestream for this trial.
+		trialStream = File.AppendText(Session.instance.thisTrialPath);
 
 		LoadTrialComponents();
-		// Write initial configuration of trial
-		// SceneObject location
-		// SceneTarget location
-		// Hoop location
 
 		ResetMembers();
 	}
@@ -344,15 +382,27 @@ public class Trial : MonoBehaviour {
 		}
 	}
 	public void NextTrial() {
+		if (Session.instance.trial == Session.totalTrials - 1) {
+			EndTrials();
+			return;
+		}
 		// Write summary for trial
-		GetSummaryText();
+		summaryStream.Write(GetSummaryText());
 
-		trialNum++;
+		// Close trial stream
+		trialStream.Close();
+
+		// Increment session count of trial
+		Session.instance.IncrementTrial();
+
 		BeginTrial();
 	}
 
 	public void EndTrials() {
+		summaryStream.Close();
 		// Write summary of entire session
+
+		Session.instance.Home();
 	}
 	////////////////////////////////////////////////////////////////
 	// UTILITY

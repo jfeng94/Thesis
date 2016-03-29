@@ -6,8 +6,16 @@ public class Session : MonoSingleton<Session> {
 	//////////////////////////////////////////
 	// System preferences
 	//////////////////////////////////////////
-	public int    totalDays = 5;
-	public int    totalTrials = 20;
+	public static int totalDays {
+		get { return MAXDAYS; }
+	}
+
+	public static int totalTrials {
+		get { return MAXTRIALS; }
+	}
+
+	private static int MAXDAYS = 5;
+	private static int MAXTRIALS = 20;
 
 	public string user  = null;
 	public int    day   = 0;
@@ -34,14 +42,32 @@ public class Session : MonoSingleton<Session> {
 
 	public string usersPath {
 		get {
-			return this.basePath + "/Users";
+			return basePath + "/Users";
 		}
 	}
 
 	public string thisUserPath {
 		get {
 			if (user != null) {
-				return this.usersPath + "/" + user;
+				return usersPath + "/" + user;
+			}
+			return null;
+		}
+	}
+
+	public string thisDayPath {
+		get {
+			if (user != null) {
+				return thisUserPath + "/Day" + day;
+			}
+			return null;
+		}
+	}
+
+	public string thisTrialPath {
+		get {
+			if (user != null) {
+				return thisDayPath + "/Trial_" + trial + ".txt";
 			}
 			return null;
 		}
@@ -49,44 +75,38 @@ public class Session : MonoSingleton<Session> {
 
 	public void SetUser(string s) {
 		user = s;
+		day  = 0;
+		while (day < totalDays) {
+			// Start at trial 0
+			trial = 0;
 
-
-		// Figure out how many days this user has already participated in.
-		bool searchingDay = true;
-		while (day <= totalDays) {
-			// Current day
-			string path = this.thisUserPath + "/Day" + day;
-
-			// Previous day's trial 20
-			string prev = this.thisUserPath + "/Day" + (day - 1) + "/Trial_20.txt";
-
-			// If this day's folder doesn't exist, but the previous day is completed
-			// (there is a trial 20)
-			if (!Directory.Exists(path) && !File.Exists(prev)) {
-				Directory.CreateDirectory(path);
-
+			// If this day does not exist, we're on this day, trial 0;
+			if (!Directory.Exists(thisDayPath)) {
+				Debug.Log(thisDayPath + "does not exist yet! Creating...");
+				Directory.CreateDirectory(thisDayPath);
 				return;
-
 			}
-			// Else if the directory already exists, figure out what the last trial was.
-			else if (Directory.Exists(path)) {
-				// Cycle through all possible 
+			else {
 				while (trial < totalTrials) {
-					string trialPath = this.thisUserPath + "/Day" + day + "/Trial_" + trial + ".txt";
-					if (!File.Exists(trialPath)) {
-						
+					if (!File.Exists(thisTrialPath)) {
+						Debug.Log("Trial " + thisTrialPath + " does not exist!");
 						return;
 					}
-
 					trial++;
 				}
 			}
-
 			day++;
 		}
 	}
 
+	public void IncrementTrial() {
+		trial++;
+	}
+
 	public void Home() {
+		user = null;
+		trial = 0;
+		day = 0;
 		Application.LoadLevel("Home");
 	}
 

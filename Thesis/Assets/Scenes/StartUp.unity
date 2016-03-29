@@ -198,9 +198,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bc1c77dfebde6a4283a7a635accdd12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  totalDays: 10
+  totalTrials: 2
   user: 
-  day: -1
-  trial: -1
+  day: 0
+  trial: 0
 --- !u!4 &1093542647
 Transform:
   m_ObjectHideFlags: 0
