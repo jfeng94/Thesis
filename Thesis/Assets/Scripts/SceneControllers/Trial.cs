@@ -346,7 +346,7 @@ public class Trial : MonoBehaviour {
 		}
 	}
 
-	public void EndCalibration() {
+	public void CloseCalibration() {
 		if (calibrateBox != null) {
 			Destroy(calibrateBox.gameObject);
 		}

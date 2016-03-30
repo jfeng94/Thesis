@@ -96,7 +96,7 @@ public class HandStream : MonoBehaviour {
 				trial.CheckFirstGrab();
 			}
 			if (calibrateBox != null) {
-				trial.EndCalibration();
+				trial.CloseCalibration();
 			}
 		}
 
