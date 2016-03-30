@@ -9,12 +9,10 @@ public class DoTouch : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		Debug.Log("Entered Hoop");
 		hoop.inside = true;
 	}
 
 	void OnTriggerExit(Collider other) {
-		Debug.Log("Exited Hoop");
 		hoop.inside = false;
 	}
 }

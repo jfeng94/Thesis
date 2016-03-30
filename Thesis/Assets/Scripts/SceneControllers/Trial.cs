@@ -48,7 +48,6 @@ public class Trial : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		BeginCalibration();
-		summaryStream = File.AppendText(Session.instance.thisDayPath + "/summary.txt");
 	}
 	
 	// Update is called once per frame
@@ -79,6 +78,18 @@ public class Trial : MonoBehaviour {
 		CreateSceneObject();
 		CreateSceneTarget();
 		CreateHoop();
+	}
+
+	private void DestroyTrialComponents() {
+		if (sceneObject != null) {
+			Destroy(sceneObject.gameObject);
+		}
+		if (sceneTarget != null) {
+			Destroy(sceneTarget.gameObject);
+		}
+		if (hoop != null) {
+			Destroy(hoop.gameObject);
+		}
 	}
 
 	// Create SceneObject
@@ -189,10 +200,64 @@ public class Trial : MonoBehaviour {
 		}
 	}
 
+	private string GetStateHeader() {
+		StringBuilder line = new StringBuilder();
+		line.Append("0. Frame Number\t");
+
+		line.Append("1. HandStream pos x\t");
+		line.Append("2. HandStream pos y\t");
+		line.Append("3. HandStream pos z\t");
+		line.Append("4. HandStream rot x\t");
+		line.Append("5. HandStream rot y\t");
+		line.Append("6. HandStream rot z\t");
+		line.Append("7. HandStream rot w\t");
+
+		line.Append("8. Trigger status\t");
+
+		line.Append("9. SceneObject pos x\t");
+		line.Append("10. SceneObject pos y\t");
+		line.Append("11. SceneObject pos z\t");
+		line.Append("12. SceneObject rot x\t");
+		line.Append("13. SceneObject rot y\t");
+		line.Append("14. SceneObject rot z\t");
+		line.Append("15. SceneObject rot w\t");
+
+		line.Append("16. MinHoopDist\t");
+		line.Append("17. MinTargDist\t");
+		line.Append("18. Time\t");
+
+		line.Append("19. Initial SO pos x\t");
+		line.Append("20. Initial SO pos y\t");
+		line.Append("21. Initial SO pos z\t");
+		line.Append("22. Initial SO rot x\t");
+		line.Append("23. Initial SO rot y\t");
+		line.Append("24. Initial SO rot z\t");
+		line.Append("25. Initial SO rot w\t");
+
+		line.Append("26. Initial ST pos x\t");
+		line.Append("27. Initial ST pos y\t");
+		line.Append("28. Initial ST pos z\t");
+		line.Append("29. Initial ST rot x\t");
+		line.Append("30. Initial ST rot y\t");
+		line.Append("31. Initial ST rot z\t");
+		line.Append("32. Initial ST rot w\t");
+
+		line.Append("33. Initial Hoop pos x\t");
+		line.Append("34. Initial Hoop pos y\t");
+		line.Append("35. Initial Hoop pos z\t");
+		line.Append("36. Initial Hoop rot x\t");
+		line.Append("37. Initial Hoop rot y\t");
+		line.Append("38. Initial Hoop rot z\t");
+		line.Append("39. Initial Hoop rot w\n");
+
+		Debug.Log(line.ToString());
+
+		return line.ToString();
+	}
+
 	private string GetStateText() {
 		// On every frame, I want to record the following things:
 		StringBuilder line = new StringBuilder();
-		line.Append("Frame ");
 		line.Append(frame);
 		line.Append("\t");												// Column 0: Frame info
 
@@ -237,28 +302,82 @@ public class Trial : MonoBehaviour {
 		// 11. Hoop Initial Configuration
 		AppendVector3(ref line, initHoopPos);							// Column 33, 34, 35: Hoop Pos
 		AppendQuaternion(ref line, initHoopRot);						// Column 36, 37, 38, 39: Hoop rot
-		line.Append("\t");
+		line.Append("\n");
+
+		return line.ToString();
+	}
+
+	public string GetSummaryHeader() {
+		StringBuilder line = new StringBuilder();
+
+		line.Append("0. Trial num\t");
+
+		line.Append("1. Init. SO Pos x\t");
+		line.Append("2. Init. SO Pos y\t");
+		line.Append("3. Init. SO Pos z\t");
+		line.Append("4. Init. SO Rot x\t");
+		line.Append("5. Init. SO Rot y\t");
+		line.Append("6. Init. SO Rot z\t");
+		line.Append("7. Init. SO Rot w\t");
+
+		line.Append("8. Init. ST Pos x\t");
+		line.Append("9. Init. ST Pos y\t");
+		line.Append("10. Init. ST Pos z\t");
+		line.Append("11. Init. ST Rot x\t");
+		line.Append("12. Init. ST Rot y\t");
+		line.Append("13. Init. ST Rot z\t");
+		line.Append("14. Init. ST Rot w\t");
+
+		line.Append("15. Init. Hoop Pos x\t");
+		line.Append("16. Init. Hoop Pos y\t");
+		line.Append("17. Init. Hoop Pos z\t");
+		line.Append("18. Init. Hoop Rot x\t");
+		line.Append("19. Init. Hoop Rot y\t");
+		line.Append("20. Init. Hoop Rot z\t");
+		line.Append("21. Init. Hoop Rot w\t");
+
+		line.Append("22. Time to first grab\t");
+		line.Append("23. Time to hoop\t");
+		line.Append("24. Time to target\t");
+		line.Append("25. Min dist to hoop\t");
+		line.Append("26. Min dist to target\n");
 
 		return line.ToString();
 	}
 
 	public string GetSummaryText() {
 		StringBuilder line = new StringBuilder();
+		line.Append(Session.instance.trial + "\t");
 
-		line.Append("Summary of Trial\t" + Session.instance.trial + "\n");
-		line.Append("Initial SO position:\t" + initSOPos.x + "\t" + initSOPos.y + "\t" + initSOPos.z + "\n"); 
-		line.Append("Initial SO rotation:\t" + initSORot.x + "\t" + initSORot.y + "\t" + initSORot.z + "\t" + initSORot.w + "\n");
-		line.Append("Initial ST position:\t" + initSTPos.x + "\t" + initSTPos.y + "\t" + initSTPos.z + "\n"); 
-		line.Append("Initial ST rotation:\t" + initSTRot.x + "\t" + initSTRot.y + "\t" + initSTRot.z + "\t" + initSTRot.w + "\n");
-		line.Append("Initial Hoop position:\t" + initHoopPos.x + "\t" + initHoopPos.y + "\t" + initHoopPos.z + "\n"); 
-		line.Append("Initial Hoop rotation:\t" + initHoopRot.x + "\t" + initHoopRot.y + "\t" + initHoopRot.z + "\t" + initHoopRot.w + "\n");
-		line.Append("Time to first grab:\t" + firstGrabTime + "\n");
-		line.Append("Time to hoop:\t" + minHoopTime + "\n");
-		line.Append("Time to target:\t" + minTargTime + "\n");
-		line.Append("Minimum distance to hoop:\t" + minHoopDist + "\n");
-		line.Append("Minimum distance to target:\t" + minTargDist + "\n");
+		line.Append(initSOPos.x + "\t");
+		line.Append(initSOPos.y + "\t");
+		line.Append(initSOPos.z + "\t");
+		line.Append(initSORot.x + "\t");
+		line.Append(initSORot.y + "\t");
+		line.Append(initSORot.z + "\t");
+		line.Append(initSORot.w + "\t");
 
-		Debug.Log(line.ToString());
+		line.Append(initSTPos.x + "\t");
+		line.Append(initSTPos.y + "\t");
+		line.Append(initSTPos.z + "\t");
+		line.Append(initSTRot.x + "\t");
+		line.Append(initSTRot.y + "\t");
+		line.Append(initSTRot.z + "\t");
+		line.Append(initSTRot.w + "\t");
+
+		line.Append(initHoopPos.x + "\t");
+		line.Append(initHoopPos.y + "\t");
+		line.Append(initHoopPos.z + "\t");
+		line.Append(initHoopRot.x + "\t");
+		line.Append(initHoopRot.y + "\t");
+		line.Append(initHoopRot.z + "\t");
+		line.Append(initHoopRot.w + "\t");
+
+		line.Append(firstGrabTime + "\t");
+		line.Append(minHoopTime + "\t");
+		line.Append(minTargTime + "\t");
+		line.Append(minHoopDist + "\t");
+		line.Append(minTargDist + "\n");
 
 		return line.ToString();
 	}
@@ -278,7 +397,6 @@ public class Trial : MonoBehaviour {
 	}
 
 	public void TouchMe() {
-		Debug.Log("asdlfkasldkfjlaksdfjkldf");
 		if (calibrateBox != null) {
 			Destroy(calibrateBox.gameObject);
 		}
@@ -344,14 +462,14 @@ public class Trial : MonoBehaviour {
  			calibrateBox.transform.position = new Vector3(0f, 12.5f, 12.5f);
 			calibrateBox.transform.rotation = Quaternion.identity;
 		}
+
+		calibrateBox.TrialNum(Session.instance.trial);
 	}
 
-	public void CloseCalibration() {
+	public void CloseCalibrationBox() {
 		if (calibrateBox != null) {
 			Destroy(calibrateBox.gameObject);
 		}
-
-		trialNum = 0;
 
 		BeginTrial();
 	}
@@ -361,10 +479,47 @@ public class Trial : MonoBehaviour {
 
 		// Create write out filestream for this trial.
 		trialStream = File.AppendText(Session.instance.thisTrialPath);
-
-		LoadTrialComponents();
+		trialStream.Write(GetStateHeader());
 
 		ResetMembers();
+
+		LoadTrialComponents();
+	}
+
+	public void EndTrial() {
+		running = false;
+
+		// Close trial stream
+		trialStream.Close();
+
+		// Write summary for trial
+		summaryStream = File.AppendText(Session.instance.thisDayPath + "/summary.txt");
+		if (Session.instance.trial == 0) {
+			summaryStream.Write(GetSummaryHeader());
+		}
+		summaryStream.Write(GetSummaryText());
+		summaryStream.Close();
+
+
+		// If we did the last trial, finish session.
+		if (Session.instance.trial == Session.totalTrials - 1) {
+			// Close summary stream
+			Debug.Log("Close Summary stream");
+			// Write summary of entire session
+	
+
+			Session.instance.Home();
+			return;
+		}
+
+		// Delete trial components
+		DestroyTrialComponents();
+
+		// Increment session count of trial
+		Session.instance.IncrementTrial();
+
+		// Load Calibration Box
+		LoadCalibrationBox();
 	}
 
 	public void CheckFirstGrab() {
@@ -377,33 +532,9 @@ public class Trial : MonoBehaviour {
 
 	public void CheckCompletion() {
 		if (proximity) {
-			running = false;
-			NextTrial();
+			EndTrial();
 		}
-	}
-	public void NextTrial() {
-		if (Session.instance.trial == Session.totalTrials - 1) {
-			EndTrials();
-			return;
-		}
-		// Write summary for trial
-		summaryStream.Write(GetSummaryText());
-
-		// Close trial stream
-		trialStream.Close();
-
-		// Increment session count of trial
-		Session.instance.IncrementTrial();
-
-		BeginTrial();
-	}
-
-	public void EndTrials() {
-		summaryStream.Close();
-		// Write summary of entire session
-
-		Session.instance.Home();
-	}
+	} 
 	////////////////////////////////////////////////////////////////
 	// UTILITY
 	////////////////////////////////////////////////////////////////

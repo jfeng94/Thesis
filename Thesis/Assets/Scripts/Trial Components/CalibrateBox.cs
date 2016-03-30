@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class CalibrateBox : MonoBehaviour {
+	public TextMesh text;
+
 	public void Highlight() {
 		Material m = Resources.Load("Materials/ObjectHighlight") as Material;
 		if (m != null) {
@@ -26,5 +29,9 @@ public class CalibrateBox : MonoBehaviour {
 				r.material = m;
 			}
 		}
+	}
+
+	public void TrialNum(int n) {
+		text.text = "Click me to begin trial " + n;
 	}
 }
