@@ -173,7 +173,7 @@ public class Practice : MonoBehaviour {
 
 
 			// Make sure the hoop is some distance away from the object and target
-			while (dist1 < 10f && dist2 < 10f) {
+			while (dist1 < 10f || dist2 < 10f) {
 				// Give it a random position and orientation.
  				pos = new Vector3(UnityEngine.Random.Range(-20f, 20f),
 						  		  UnityEngine.Random.Range(  2f, 20f),

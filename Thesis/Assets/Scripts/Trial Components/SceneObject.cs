@@ -8,25 +8,30 @@ public class SceneObject : MonoBehaviour {
 	bool unlit = false;
 	DateTime lastFlash;
 
+	private Material unlitMat   = null;
+	private Material defaultMat = null;
+	private Material highlitMat = null;
+	private Renderer rend       = null;
+
+
+	void Start() {
+		unlitMat   = Resources.Load("Materials/ObjectDefaultUnlit") as Material;
+		defaultMat = Resources.Load("Materials/ObjectDefault")      as Material;
+		highlitMat = Resources.Load("Materials/ObjectHighlight")    as Material;
+		rend       = gameObject.GetComponent<Renderer>() as Renderer;
+	}
+
 	void Update() {
 		float secs = (float) (DateTime.Now - lastFlash).TotalSeconds;
 		if (flash && !suspendFlash && secs > 0.25f) {
 			if (unlit) {
-				Material m = Resources.Load("Materials/ObjectDefault") as Material;
-				if (m != null) {
-					Renderer r = gameObject.GetComponent<Renderer>() as Renderer;
-					if (r != null) {
-						r.material = m;
-					}
+				if (defaultMat != null && rend != null) {
+					rend.material = defaultMat;
 				}
 			}
 			else {
-				Material m = Resources.Load("Materials/ObjectDefaultUnlit") as Material;
-				if (m != null) {
-					Renderer r = gameObject.GetComponent<Renderer>() as Renderer;
-					if (r != null) {
-						r.material = m;
-					}
+				if (unlitMat != null && rend != null) {
+					rend.material = unlitMat;
 				}
 			}
 
@@ -37,29 +42,15 @@ public class SceneObject : MonoBehaviour {
 
 	public void Highlight() {
 		suspendFlash = true;
-		Material m = Resources.Load("Materials/ObjectHighlight") as Material;
-		if (m != null) {
-			Renderer r = gameObject.GetComponent<Renderer>() as Renderer;
-			if (r != null) {
-				r.material = m;
-			}
-			else {
-				Debug.Log("Renderer is null!");
-			}
-		}
-		else {
-			Debug.Log("Material is null");
+		if (highlitMat != null && rend != null) { 
+			rend.material = highlitMat;
 		}
 	}
 
 	public void Unhighlight() {
 		suspendFlash = false;
-		Material m = Resources.Load("Materials/ObjectDefault") as Material;
-		if (m != null) {
-			Renderer r = gameObject.GetComponent<Renderer>() as Renderer;
-			if (r != null) {
-				r.material = m;
-			}
+		if (defaultMat != null && rend != null) { 
+			rend.material = defaultMat;
 		}
 	}
 

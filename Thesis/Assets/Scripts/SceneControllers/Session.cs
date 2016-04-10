@@ -73,7 +73,7 @@ public class Session : MonoSingleton<Session> {
 	public string thisTrialPath {
 		get {
 			if (user != null) {
-				return thisDayPath + "/Trial_" + trial + ".txt";
+				return thisDayPath + "/Trial_" + trial + ".tsv";
 			}
 			return null;
 		}

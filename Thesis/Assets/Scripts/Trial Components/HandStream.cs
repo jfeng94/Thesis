@@ -53,6 +53,7 @@ public class HandStream : MonoBehaviour {
 	private void ConnectHydra() {
 		if (SixenseInput.IsBaseConnected(0) != false) {
 			hydra = SixenseInput.Controllers[0];
+			// SixensePlugin.sixenseAutoEnableHemisphereTracking(0);
 		}
 	}
 

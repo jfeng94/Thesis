@@ -628,7 +628,7 @@ public class Trial : MonoBehaviour {
 		trialStream.Close();
 
 		// Write summary for trial
-		summaryStream = File.AppendText(Session.instance.thisDayPath + "/summary.txt");
+		summaryStream = File.AppendText(Session.instance.thisDayPath + "/summary.tsv");
 		if (Session.instance.trial == 0) {
 			summaryStream.Write(GetSummaryHeader());
 		}

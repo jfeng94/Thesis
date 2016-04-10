@@ -9,11 +9,24 @@ public class Hoop : MonoBehaviour {
 	private enum Mode {DEFAULT, RED, GREEN};
 	private Mode mode = Mode.DEFAULT;
 
+	private Material unlitMat   = null;
+	private Material defaultMat = null;
+	private Material redMat     = null;
+	private Material greenMat   = null; 
+	private Renderer rend       = null;
 
 	bool flash = false;
 	bool suspendFlash = false;
 	bool unlit = false;
 	DateTime lastFlash;
+
+	void Start() {
+		unlitMat   = Resources.Load("Materials/HoopDefaultUnlit") as Material;
+		defaultMat = Resources.Load("Materials/HoopDefault")      as Material;
+		redMat     = Resources.Load("Materials/HoopRed")          as Material;
+		greenMat   = Resources.Load("Materials/HoopGreen")        as Material;
+		rend       = gameObject.GetComponent<Renderer>() as Renderer;
+	}
 
 	// Update is called once per frame
 	void Update () {
@@ -33,27 +46,16 @@ public class Hoop : MonoBehaviour {
 			}
 		}
 
-
-
-
 		float secs = (float) (DateTime.Now - lastFlash).TotalSeconds;
 		if (flash && !suspendFlash && secs > 0.25f) {
 			if (unlit) {
-				Material m = Resources.Load("Materials/HoopDefault") as Material;
-				if (m != null) {
-					Renderer r = gameObject.GetComponent<Renderer>() as Renderer;
-					if (r != null) {
-						r.material = m;
-					}
+				if (defaultMat != null && rend != null) {
+					rend.material = defaultMat;
 				}
 			}
 			else {
-				Material m = Resources.Load("Materials/HoopDefaultUnlit") as Material;
-				if (m != null) {
-					Renderer r = gameObject.GetComponent<Renderer>() as Renderer;
-					if (r != null) {
-						r.material = m;
-					}
+				if (unlitMat != null && rend != null) {
+					rend.material = unlitMat;
 				}
 			}
 
@@ -63,37 +65,30 @@ public class Hoop : MonoBehaviour {
 	}
 
 	private void UpdateMode(Mode mode_) {
-		string path = "Materials/";
+		Material m = null;
 		switch (mode_) {
 			case (Mode.DEFAULT):
 				suspendFlash = false;
-				path += "HoopDefault";
+				m = defaultMat;
 				break;
 
 			case (Mode.RED):
 				suspendFlash = true;
-				path += "HoopRed";
+				m = redMat;
 				break;
 
 			case (Mode.GREEN):
 				suspendFlash = true;
-				path += "HoopGreen";
+				m = greenMat;
 				break;
 		}
 		mode = mode_;
 
-		Material m = Resources.Load(path) as Material;
-		if (m != null) {
-			Renderer r = gameObject.GetComponent<Renderer>() as Renderer;
-			if (r != null) {
-				r.material = m;
-			}
-			else {
-				Debug.Log("Renderer is null!");
-			}
+		if (m != null && rend != null) {
+			rend.material = m;
 		}
 		else {
-			Debug.Log("Material is null");
+				Debug.Log("Renderer is null!");
 		}
 	}
 
