@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class Hoop : MonoBehaviour {
@@ -7,6 +8,12 @@ public class Hoop : MonoBehaviour {
 
 	private enum Mode {DEFAULT, RED, GREEN};
 	private Mode mode = Mode.DEFAULT;
+
+
+	bool flash = false;
+	bool suspendFlash = false;
+	bool unlit = false;
+	DateTime lastFlash;
 
 	// Update is called once per frame
 	void Update () {
@@ -25,20 +32,51 @@ public class Hoop : MonoBehaviour {
 				UpdateMode(Mode.DEFAULT);
 			}
 		}
+
+
+
+
+		float secs = (float) (DateTime.Now - lastFlash).TotalSeconds;
+		if (flash && !suspendFlash && secs > 0.25f) {
+			if (unlit) {
+				Material m = Resources.Load("Materials/HoopDefault") as Material;
+				if (m != null) {
+					Renderer r = gameObject.GetComponent<Renderer>() as Renderer;
+					if (r != null) {
+						r.material = m;
+					}
+				}
+			}
+			else {
+				Material m = Resources.Load("Materials/HoopDefaultUnlit") as Material;
+				if (m != null) {
+					Renderer r = gameObject.GetComponent<Renderer>() as Renderer;
+					if (r != null) {
+						r.material = m;
+					}
+				}
+			}
+
+			unlit = !unlit;
+			lastFlash = DateTime.Now;
+		}
 	}
 
 	private void UpdateMode(Mode mode_) {
 		string path = "Materials/";
 		switch (mode_) {
 			case (Mode.DEFAULT):
+				suspendFlash = false;
 				path += "HoopDefault";
 				break;
 
 			case (Mode.RED):
+				suspendFlash = true;
 				path += "HoopRed";
 				break;
 
 			case (Mode.GREEN):
+				suspendFlash = true;
 				path += "HoopGreen";
 				break;
 		}
@@ -65,5 +103,15 @@ public class Hoop : MonoBehaviour {
 
 	public bool InHoop() {
 		return (mode == Mode.RED || mode == Mode.GREEN);
+	}
+
+	public void Flash() {
+		flash = true;
+		lastFlash = DateTime.Now;
+	}
+
+	public void DontFlash() {
+		flash = false;
+		
 	}
 }

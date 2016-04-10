@@ -59,6 +59,9 @@ public class Practice : MonoBehaviour {
 		if (hoop != null) {
 			if (hoop.InHoop()) {
 				passedHoop = true;
+
+				hoop.DontFlash();
+				sceneTarget.Flash();
 			}
 		}
 	}
@@ -190,6 +193,15 @@ public class Practice : MonoBehaviour {
 		passedHoop = false;
 	}
 
+	public void CheckFirstGrab() {
+		if (!firstGrab) {
+			firstGrab = true;
+
+			sceneObject.DontFlash();
+			hoop.Flash();
+		}
+	}
+
 	////////////////////////////////////////////////////////////////
 	// FLOW CONTROL
 	////////////////////////////////////////////////////////////////
@@ -286,6 +298,8 @@ public class Practice : MonoBehaviour {
 		ResetMembers();
 
 		LoadTrialComponents();
+
+		sceneObject.Flash();
 	}
 
 	public void EndTrial() {

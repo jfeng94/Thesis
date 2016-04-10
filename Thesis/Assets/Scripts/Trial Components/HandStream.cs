@@ -40,7 +40,7 @@ public class HandStream : MonoBehaviour {
 		if (hydra == null) {
 			ConnectHydra();
 			if (hydra == null) {
-				Debug.Log("Hydra not connected???");
+				// Debug.Log("Hydra not connected???");
 				return;
 			}
 		}
@@ -99,9 +99,9 @@ public class HandStream : MonoBehaviour {
 					trial.CheckFirstGrab();
 				}
 
-				// if (practice != null) {
-				// 	practice.CheckFirstGrab();
-				// }
+				if (practice != null) {
+					practice.CheckFirstGrab();
+				}
 			}
 			if (calibrateBox != null) {
 

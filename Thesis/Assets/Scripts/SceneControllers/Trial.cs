@@ -83,9 +83,18 @@ public class Trial : MonoBehaviour {
 
 			if (hoop.InHoop()) {
 				passedHoop = true;
+
+				hoop.DontFlash();
+				sceneTarget.Flash();
 			}
 
 			frame++;
+		}
+
+		if (Input.GetKeyDown("space")) {
+			if (Session.instance.user3D) {
+				VRSettings.enabled = !VRSettings.enabled;
+			}
 		}
 	}
 
@@ -604,6 +613,8 @@ public class Trial : MonoBehaviour {
 		ResetMembers();
 
 		LoadTrialComponents();
+
+		sceneObject.Flash();
 	}
 
 	public void EndTrial() {
@@ -646,8 +657,10 @@ public class Trial : MonoBehaviour {
 		if (!firstGrab) {
 			firstGrab = true;
 			firstGrabTime = (float) (DateTime.Now - start).TotalSeconds;
-		}
 
+			sceneObject.DontFlash();
+			hoop.Flash();
+		}
 	}
 
 	public void CheckCompletion() {
