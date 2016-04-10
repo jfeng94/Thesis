@@ -63,4 +63,8 @@ public class HomeScreen : MonoBehaviour {
 	public void Practice() {
 		Session.instance.Practice();
 	}
+
+	public void Exit() {
+		Session.instance.Exit();
+	}
 }

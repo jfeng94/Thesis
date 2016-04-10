@@ -161,4 +161,8 @@ public class Session : MonoSingleton<Session> {
 	public void Practice() {
 		Application.LoadLevel("Practice");
 	}
+
+	public void Exit() {
+		Application.Quit();
+	}
 }

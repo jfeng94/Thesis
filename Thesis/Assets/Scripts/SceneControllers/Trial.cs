@@ -96,6 +96,11 @@ public class Trial : MonoBehaviour {
 				VRSettings.enabled = !VRSettings.enabled;
 			}
 		}
+
+		if (Input.GetKeyDown("escape")) {
+			Session.instance.Home();
+		}
+
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -318,7 +323,6 @@ public class Trial : MonoBehaviour {
 		line.Append("39. Initial Hoop rot w\t");
 
 		line.Append("40. Touching hoop\n");
-		Debug.Log(line.ToString());
 
 		return line.ToString();
 	}

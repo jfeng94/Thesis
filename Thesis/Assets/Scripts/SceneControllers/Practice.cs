@@ -56,6 +56,14 @@ public class Practice : MonoBehaviour {
 			Session.instance.Home();
 		}
 
+		if (Input.GetKeyDown("space")) {
+			string path = Application.persistentDataPath +
+				                          "/" + (DateTime.Now).ToString("HH-mm-ss") +
+				                          ".png";
+			Application.CaptureScreenshot(path);
+			Debug.Log(path);
+		}
+
 		if (hoop != null) {
 			if (hoop.InHoop()) {
 				passedHoop = true;
