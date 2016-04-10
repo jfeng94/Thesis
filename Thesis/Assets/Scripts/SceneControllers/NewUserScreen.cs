@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VR;
 using System;
 using System.IO;
 using System.Text;
@@ -16,6 +17,8 @@ public class NewUserScreen : MonoBehaviour {
 	public Text CADBlack = null;
 
 	void Start() {
+		VRSettings.enabled = false;
+
 		InputField inF = FindObjectOfType(typeof(InputField)) as InputField;
 		Dropdown[] dds = FindObjectsOfType(typeof(Dropdown))  as Dropdown[];
 		Slider     CAD = FindObjectOfType(typeof(Slider))     as Slider;

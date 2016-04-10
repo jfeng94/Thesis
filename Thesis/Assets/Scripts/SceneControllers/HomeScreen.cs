@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VR;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ public class HomeScreen : MonoBehaviour {
 	List<string> users = new List<string>();
 
 	void Start() {
+		VRSettings.enabled = false;
+
 		Dropdown dd = FindObjectOfType(typeof(Dropdown)) as Dropdown;
 		if (dd != null) {
 			userList = dd;
@@ -21,14 +24,19 @@ public class HomeScreen : MonoBehaviour {
 	private void PopulateUserList() {
 		// Get Users directory
 		string path        = Session.instance.usersPath;
-		string[] userPaths = Directory.GetDirectories(path + "/");
+		string[] userPaths = null;
+		if (Directory.Exists(path)) {
+			userPaths = Directory.GetDirectories(path + "/");
+		}
 		
 		users = new List<string>();
 
 		// Get List of Users
-		for (int i = 0; i < userPaths.Length; i++) {
-			string[] substrings = userPaths[i].Split('/');
-			users.Add(substrings[substrings.Length - 1]);
+		if (userPaths != null) {
+			for (int i = 0; i < userPaths.Length; i++) {
+				string[] substrings = userPaths[i].Split('/');
+				users.Add(substrings[substrings.Length - 1]);
+			}
 		}
 
 		// Populate Dropdown
@@ -50,5 +58,9 @@ public class HomeScreen : MonoBehaviour {
 	public void ViewUser() {
 		Session.instance.SetUser(userList.options[userList.value].text);
 		Session.instance.ViewUser();
+	}
+
+	public void Practice() {
+		Session.instance.Practice();
 	}
 }

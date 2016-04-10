@@ -19,6 +19,7 @@ public class HandStream : MonoBehaviour {
 	//////////////////
 	public GameObject scene = null;
 	public Trial      trial = null;
+	public Practice   practice = null;
 
 	private SceneObject target = null;
 	private SceneObject touch  = null;
@@ -93,10 +94,24 @@ public class HandStream : MonoBehaviour {
 			if (touch != null) {
 				target = touch;
 				target.transform.parent = transform;
-				trial.CheckFirstGrab();
+
+				if (trial != null) {
+					trial.CheckFirstGrab();
+				}
+
+				// if (practice != null) {
+				// 	practice.CheckFirstGrab();
+				// }
 			}
 			if (calibrateBox != null) {
-				trial.CloseCalibrationBox();
+
+				if (trial != null) {
+					trial.CloseCalibrationBox();
+				}
+
+				if (practice != null) {
+					practice.CloseCalibrationBox();
+				}
 			}
 		}
 
@@ -104,7 +119,13 @@ public class HandStream : MonoBehaviour {
 			if (target != null) {
 				target.transform.parent = scene.transform;
 				target = null;
-				trial.CheckCompletion();
+				if (trial != null) {
+					trial.CheckCompletion();
+				}
+
+				if (practice != null) {
+					practice.CheckCompletion();
+				}
 			}
 		}
 
@@ -151,7 +172,13 @@ public class HandStream : MonoBehaviour {
 		                   as TouchMe;
 
 		if (tm != null) {
-			trial.TouchMe();
+			if (trial != null) {
+				trial.TouchMe();
+			}
+
+			if (practice != null) {
+				practice.TouchMe();
+			}
 		}
 	}
 

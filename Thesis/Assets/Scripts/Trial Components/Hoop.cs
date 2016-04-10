@@ -57,7 +57,9 @@ public class Hoop : MonoBehaviour {
 		else {
 			Debug.Log("Material is null");
 		}
+	}
 
-
+	public bool IsRed() {
+		return (mode == Mode.RED);
 	}
 }

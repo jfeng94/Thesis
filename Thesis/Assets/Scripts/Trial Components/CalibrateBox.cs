@@ -34,4 +34,8 @@ public class CalibrateBox : MonoBehaviour {
 	public void TrialNum(int n) {
 		text.text = "Click me to begin trial " + n;
 	}
+
+	public void PracticeNum(int n) {
+		text.text = "Click me to start\npractice " + n + " of 10";
+	}
 }

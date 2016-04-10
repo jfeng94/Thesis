@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.VR;
 using System;
 using System.IO;
 using System.Text;
@@ -40,6 +41,8 @@ public class Trial : MonoBehaviour {
 	private Quaternion initSTRot   = Quaternion.identity; 
 	private Quaternion initHoopRot = Quaternion.identity; 
 
+	private int hoopRedFrames = 0;
+
 	private DateTime start;
 	private int frame = 0;
 
@@ -48,6 +51,10 @@ public class Trial : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		BeginCalibration();
+
+		if (Session.instance.user3D) {
+			VRSettings.enabled = true;
+		}
 	}
 	
 	// Update is called once per frame
@@ -131,15 +138,29 @@ public class Trial : MonoBehaviour {
 		sceneTarget   = go.GetComponent<SceneTarget>() as SceneTarget;
 
 		if (sceneTarget != null) {
-			// Give it a random position and orientation.
-			sceneTarget.transform.position = new Vector3(UnityEngine.Random.Range(-20f, 20f),
-														 UnityEngine.Random.Range(  2f, 20f),
-														 UnityEngine.Random.Range(  7f, 23f));
-			sceneTarget.transform.rotation = UnityEngine.Random.rotation;
-		}
 
-		initSTPos = sceneTarget.transform.position;
-		initSTRot = sceneTarget.transform.rotation;
+			float dist = float.MinValue;
+			Vector3    pos = Vector3.zero;
+			Quaternion rot = Quaternion.identity;
+
+			// Make sure the target is some distance away from the object
+			while (dist < 10f) {
+				// Give it a random position and orientation.
+				pos = new Vector3(UnityEngine.Random.Range(-20f, 20f),
+								  UnityEngine.Random.Range(  2f, 20f),
+								  UnityEngine.Random.Range(  7f, 23f));
+				rot = UnityEngine.Random.rotation;
+
+				float dx = pos.x - sceneObject.transform.position.x;
+				float dy = pos.y - sceneObject.transform.position.y;
+				float dz = pos.z - sceneObject.transform.position.z;
+				dist = Mathf.Sqrt(dx * dx + dy * dy + dz * dz);
+			}
+			sceneTarget.transform.position = pos;							
+			sceneTarget.transform.rotation = rot;
+			initSTPos = pos;
+			initSTRot = rot;
+		}
 	}
 
 	private void CreateHoop() {
@@ -155,14 +176,35 @@ public class Trial : MonoBehaviour {
 		hoop          = go.GetComponent<Hoop>() as Hoop;
 
 		if (hoop != null) {
-			// Give it a random position and orientation.
- 			hoop.transform.position = new Vector3(UnityEngine.Random.Range(-20f, 20f),
-												  UnityEngine.Random.Range(  2f, 20f),
-												  UnityEngine.Random.Range(  7f, 23f));
-			hoop.transform.rotation = UnityEngine.Random.rotation;
+			float dist1 = float.MinValue;
+			float dist2 = float.MinValue;
+			Vector3    pos = Vector3.zero;
+			Quaternion rot = Quaternion.identity;
+
+
+			// Make sure the hoop is some distance away from the object and target
+			while (dist1 < 10f && dist2 < 10f) {
+				// Give it a random position and orientation.
+ 				pos = new Vector3(UnityEngine.Random.Range(-20f, 20f),
+						  		  UnityEngine.Random.Range(  2f, 20f),
+						  		  UnityEngine.Random.Range(  7f, 23f));
+				rot = UnityEngine.Random.rotation;
+
+				float dx1 = pos.x - sceneObject.transform.position.x;
+				float dy1 = pos.y - sceneObject.transform.position.y;
+				float dz1 = pos.z - sceneObject.transform.position.z;
+				dist1 = Mathf.Sqrt(dx1 * dx1 + dy1 * dy1 + dz1 * dz1);
+
+				float dx2 = pos.x - sceneTarget.transform.position.x;
+				float dy2 = pos.y - sceneTarget.transform.position.y;
+				float dz2 = pos.z - sceneTarget.transform.position.z;
+				dist2 = Mathf.Sqrt(dx2 * dx2 + dy2 * dy2 + dz2 * dz2);
+			}
+			hoop.transform.position = pos;
+			hoop.transform.rotation = rot;
+			initHoopPos = pos;
+			initHoopRot = rot;
 		}
-		initHoopPos = hoop.transform.position;
-		initHoopRot = hoop.transform.rotation;
 	}
 
 	private void ResetMembers() {
@@ -174,11 +216,15 @@ public class Trial : MonoBehaviour {
 		minTargFrame  = 0;
 		firstGrabTime = float.PositiveInfinity;
 
+		hoopRedFrames = 0;
+
 		frame     = 0;
 		running   = true;
 		firstGrab = false;
 		proximity = false;
 	}
+
+
 	////////////////////////////////////////////////////////////////
 	// UPDATE HELPERS
 	////////////////////////////////////////////////////////////////
@@ -248,8 +294,9 @@ public class Trial : MonoBehaviour {
 		line.Append("36. Initial Hoop rot x\t");
 		line.Append("37. Initial Hoop rot y\t");
 		line.Append("38. Initial Hoop rot z\t");
-		line.Append("39. Initial Hoop rot w\n");
+		line.Append("39. Initial Hoop rot w\t");
 
+		line.Append("40. Touching hoop\n");
 		Debug.Log(line.ToString());
 
 		return line.ToString();
@@ -302,6 +349,16 @@ public class Trial : MonoBehaviour {
 		// 11. Hoop Initial Configuration
 		AppendVector3(ref line, initHoopPos);							// Column 33, 34, 35: Hoop Pos
 		AppendQuaternion(ref line, initHoopRot);						// Column 36, 37, 38, 39: Hoop rot
+		line.Append("\t");
+
+		// 12. Hoop error state
+		if (hoop.IsRed()) {
+			hoopRedFrames++;
+			line.Append("1");
+		}
+		else {
+			line.Append("0");
+		}
 		line.Append("\n");
 
 		return line.ToString();
@@ -340,7 +397,9 @@ public class Trial : MonoBehaviour {
 		line.Append("23. Time to hoop\t");
 		line.Append("24. Time to target\t");
 		line.Append("25. Min dist to hoop\t");
-		line.Append("26. Min dist to target\n");
+		line.Append("26. Min dist to target\t");
+
+		line.Append("27. Total frames hoop was red\n");
 
 		return line.ToString();
 	}
@@ -377,7 +436,8 @@ public class Trial : MonoBehaviour {
 		line.Append(minHoopTime + "\t");
 		line.Append(minTargTime + "\t");
 		line.Append(minHoopDist + "\t");
-		line.Append(minTargDist + "\n");
+		line.Append(minTargDist + "\t");
+		line.Append(hoopRedFrames + "\n");
 
 		return line.ToString();
 	}
