@@ -24,6 +24,7 @@ public class Practice : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		practiceNum = 1;
 		BeginCalibration();
 		VRSettings.enabled = false;
 	}
@@ -179,7 +180,6 @@ public class Practice : MonoBehaviour {
 	}
 
 	private void ResetMembers() {
-		practiceNum = 1;
 		firstGrab = false;
 		proximity = false;
 	}

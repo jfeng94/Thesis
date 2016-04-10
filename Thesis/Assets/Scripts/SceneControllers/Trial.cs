@@ -54,6 +54,12 @@ public class Trial : MonoBehaviour {
 
 		if (Session.instance.user3D) {
 			VRSettings.enabled = true;
+			Camera.main.fieldOfView = 60;
+		}
+		else {
+			VRSettings.enabled = false;
+			Camera.main.fieldOfView = 60;
+
 		}
 	}
 	
