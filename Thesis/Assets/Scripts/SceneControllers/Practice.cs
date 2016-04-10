@@ -16,9 +16,10 @@ public class Practice : MonoBehaviour {
 
 	public HandStream  hs = null;
 
-	bool proximity = false;
-	bool running   = false;
-	bool firstGrab = false;
+	bool proximity  = false;
+	bool running    = false;
+	bool firstGrab  = false;
+	bool passedHoop = false;
 
 	private int practiceNum = 1;
 
@@ -44,7 +45,6 @@ public class Practice : MonoBehaviour {
 
 		if (Input.GetKeyDown("3")) {
 			VRSettings.enabled = true;
-			Camera.main.fieldOfView = 60;
 		}
 
 		if (Input.GetKeyDown("2")) {
@@ -56,6 +56,11 @@ public class Practice : MonoBehaviour {
 			Session.instance.Home();
 		}
 
+		if (hoop != null) {
+			if (hoop.InHoop()) {
+				passedHoop = true;
+			}
+		}
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -180,8 +185,9 @@ public class Practice : MonoBehaviour {
 	}
 
 	private void ResetMembers() {
-		firstGrab = false;
-		proximity = false;
+		firstGrab  = false;
+		proximity  = false;
+		passedHoop = false;
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -301,7 +307,7 @@ public class Practice : MonoBehaviour {
 	}
 
 	public void CheckCompletion() {
-		if (proximity) {
+		if (proximity && passedHoop) {
 			EndTrial();
 		}
 	} 

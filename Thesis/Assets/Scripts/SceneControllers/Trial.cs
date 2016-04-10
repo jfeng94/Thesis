@@ -19,9 +19,10 @@ public class Trial : MonoBehaviour {
 
 	public HandStream  hs = null;
 
-	bool proximity = false;
-	bool running   = false;
-	bool firstGrab = false;
+	bool proximity  = false;
+	bool running    = false;
+	bool firstGrab  = false;
+	bool passedHoop = false;
 
 	////////////////////////////////////////////////////////////////////////////
 	// Data to keep track of per trial
@@ -54,7 +55,6 @@ public class Trial : MonoBehaviour {
 
 		if (Session.instance.user3D) {
 			VRSettings.enabled = true;
-			Camera.main.fieldOfView = 60;
 		}
 		else {
 			VRSettings.enabled = false;
@@ -80,6 +80,11 @@ public class Trial : MonoBehaviour {
 			UpdateMinDists();
 			string line = GetStateText();
 			trialStream.Write(line);
+
+			if (hoop.InHoop()) {
+				passedHoop = true;
+			}
+
 			frame++;
 		}
 	}
@@ -189,7 +194,7 @@ public class Trial : MonoBehaviour {
 
 
 			// Make sure the hoop is some distance away from the object and target
-			while (dist1 < 10f && dist2 < 10f) {
+			while (dist1 < 10f || dist2 < 10f) {
 				// Give it a random position and orientation.
  				pos = new Vector3(UnityEngine.Random.Range(-20f, 20f),
 						  		  UnityEngine.Random.Range(  2f, 20f),
@@ -224,10 +229,11 @@ public class Trial : MonoBehaviour {
 
 		hoopRedFrames = 0;
 
-		frame     = 0;
-		running   = true;
-		firstGrab = false;
-		proximity = false;
+		frame      = 0;
+		running    = true;
+		firstGrab  = false;
+		proximity  = false;
+		passedHoop = false;
 	}
 
 
@@ -345,17 +351,17 @@ public class Trial : MonoBehaviour {
 		// 9. Scene Object Initial Configuration
 		AppendVector3(ref line, initSOPos);								// Column 19, 20, 21: SceneObject Pos
 		AppendQuaternion(ref line, initSORot);							// Column 22, 23, 24, 25: SceneObject rot
-		line.Append("\t");
+
 
 		// 10. SceneTarget Initial Configuration
 		AppendVector3(ref line, initSTPos);								// Column 26, 27, 28: SceneTarget Pos
 		AppendQuaternion(ref line, initSTRot);							// Column 29, 30, 31, 32: SceneTarget rot
-		line.Append("\t");
+
 
 		// 11. Hoop Initial Configuration
 		AppendVector3(ref line, initHoopPos);							// Column 33, 34, 35: Hoop Pos
 		AppendQuaternion(ref line, initHoopRot);						// Column 36, 37, 38, 39: Hoop rot
-		line.Append("\t");
+
 
 		// 12. Hoop error state
 		if (hoop.IsRed()) {
@@ -405,7 +411,25 @@ public class Trial : MonoBehaviour {
 		line.Append("25. Min dist to hoop\t");
 		line.Append("26. Min dist to target\t");
 
-		line.Append("27. Total frames hoop was red\n");
+		line.Append("27. Total frames hoop was red\t");
+
+		line.Append("28. Target Forward Vector x\t");
+		line.Append("29. Target Forward Vector y\t");
+		line.Append("30. Target Forward Vector z\t");
+		line.Append("31. Object Forward Vector x\t");
+		line.Append("32. Object Forward Vector y\t");
+		line.Append("33. Object Forward Vector z\t");
+		line.Append("34. Angle between the two\t");
+
+		line.Append("35. Target Up Vector x\t");
+		line.Append("36. Target Up Vector y\t");
+		line.Append("37. Target Up Vector z\t");
+		line.Append("38. Object Up Vector x\t");
+		line.Append("39. Object Up Vector y\t");
+		line.Append("40. Object Up Vector z\t");
+		line.Append("41. Angle between the two\t");
+
+		line.Append("42. Maximal Angle difference\n");
 
 		return line.ToString();
 	}
@@ -443,9 +467,39 @@ public class Trial : MonoBehaviour {
 		line.Append(minTargTime + "\t");
 		line.Append(minHoopDist + "\t");
 		line.Append(minTargDist + "\t");
-		line.Append(hoopRedFrames + "\n");
+		line.Append(hoopRedFrames + "\t");
 
+		Vector3 f1 = sceneTarget.transform.forward;
+		Vector3 f2 = sceneObject.transform.forward;
+		float   fAngle = AngleDeviation(f1, f2);
+		AppendVector3(ref line, f1);
+		AppendVector3(ref line, f2);
+		line.Append(fAngle + "\t");
+
+		Vector3 u1 = sceneTarget.transform.up;
+		Vector3 u2 = sceneObject.transform.up;
+		float   uAngle = AngleDeviation(u1, u2);
+		AppendVector3(ref line, u1);
+		AppendVector3(ref line, u2);
+		line.Append(uAngle + "\t");
+
+		line.Append(Mathf.Max(fAngle, uAngle) + "\n");
 		return line.ToString();
+	}
+
+	// Takes two vectors, and determines the angle deviation
+	// given that orthogonality and parallelism are considered
+	// isomorphic. This gives us the angle offset between the 
+	// two cubes
+	private float AngleDeviation(Vector3 a, Vector3 b) {
+		float cosTheta  = Vector3.Dot(a, b); 
+		float theta     = Mathf.Acos(cosTheta);
+		float degrees   = theta * 180 / Mathf.PI;
+		float deviation = ((degrees % 90) + 90) % 90;
+
+		// Determine minimum distance from an orthogonal position
+		deviation = Mathf.Min(deviation, 90 - deviation);
+		return deviation;
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -597,7 +651,7 @@ public class Trial : MonoBehaviour {
 	}
 
 	public void CheckCompletion() {
-		if (proximity) {
+		if (proximity && passedHoop) {
 			EndTrial();
 		}
 	} 

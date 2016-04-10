@@ -23,6 +23,10 @@ public class Session : MonoSingleton<Session> {
 	public int    trial  = 0;
 	public bool   user3D = false;
 
+	public Vector3    offsetPos = Vector3.zero;
+	public Quaternion offsetRot = Quaternion.identity;
+
+
 	// Use this for initialization
 	void Start () {
 		// This session manager controls everything. Should not disappear on

@@ -11,8 +11,8 @@ public class HandStream : MonoBehaviour {
 	/////////////////
 	// CALIBRATION //
 	/////////////////
-	private Vector3    offsetPos = Vector3.zero;
-	private Quaternion offsetRot = Quaternion.identity;
+	public Vector3    offsetPos = Vector3.zero;
+	public Quaternion offsetRot = Quaternion.identity;
 
 	//////////////////
 	// INTERACTIONS //
@@ -31,7 +31,7 @@ public class HandStream : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		SetOffset(Session.instance.offsetPos);
 	}
 	
 	// Update is called once per frame
@@ -130,8 +130,13 @@ public class HandStream : MonoBehaviour {
 		}
 
 		if (hydra.GetButtonDown(SixenseButtons.START)) {
-			offsetPos = hydra.Position + new Vector3(0f, 10f, -5f);
+			SetOffset(hydra.Position);
 		}
+	}
+
+	public void SetOffset(Vector3 v) {
+		offsetPos = v + new Vector3(0f, 10f, -5f);
+		Session.instance.offsetPos = v;
 	}
 
 

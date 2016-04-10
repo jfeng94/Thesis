@@ -62,4 +62,8 @@ public class Hoop : MonoBehaviour {
 	public bool IsRed() {
 		return (mode == Mode.RED);
 	}
+
+	public bool InHoop() {
+		return (mode == Mode.RED || mode == Mode.GREEN);
+	}
 }
