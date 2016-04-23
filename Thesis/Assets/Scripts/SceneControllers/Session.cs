@@ -36,7 +36,9 @@ public class Session : MonoSingleton<Session> {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (Input.GetKeyDown("space")) {
+			DataAnalysis da = new DataAnalysis();
+		}
 	}
 
 
