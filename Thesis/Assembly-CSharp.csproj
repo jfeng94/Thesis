@@ -127,6 +127,8 @@
      <Compile Include="Assets\PrimitivesPro\Scripts\Utils\ObjExporter.cs" />
      <Compile Include="Assets\PrimitivesPro\Scripts\Utils\Plane.cs" />
      <Compile Include="Assets\PrimitivesPro\Scripts\Utils\Utils.cs" />
+     <Compile Include="Assets\Scripts\DataAnalysis\DataAnalysis.cs" />
+     <Compile Include="Assets\Scripts\DataAnalysis\DataGlob.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\HomeScreen.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\MonoSingleton.cs" />
      <Compile Include="Assets\Scripts\SceneControllers\NewUserScreen.cs" />
