@@ -6,40 +6,618 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DataAnalysis {
-	List<UserData> Users = new List<UserData>();
+	List<UserData> users = new List<UserData>();
+	string basePath = Application.persistentDataPath + "/Data";
 
 	public DataAnalysis() {
 		LoadUserData();
+		PrintData();
 	}
 
 	private void LoadUserData() {
 		string path   = Session.instance.usersPath;
 		string[] dirs = Directory.GetDirectories(path);
 		for (int i = 0; i < dirs.Length; i++) {
-		// for (int i = 0; i < 1; i++) {
-			Debug.Log("User " + i + ": " + dirs[i]);
 			UserData ud = new UserData(dirs[i]);
+
+			users.Add(ud);
 		}
 	}
+
+	private void PrintData() {
+		if (!Directory.Exists(basePath)) {
+			Directory.CreateDirectory(basePath);
+		}
+
+		PrintGrabTime();
+		PrintHoopTime();
+		PrintTargTime();
+
+		PrintHoopDist();
+		PrintTargDist();
+
+		PrintRedFrames();
+
+		PrintAngularDivergence();
+
+	}
+
+	private void PrintGrabTime() {
+		string path3D   = basePath + "/GrabTime3D.tsv";
+		string path2D   = basePath + "/GrabTime2D.tsv";
+		string pathComp = basePath + "/GrabTimeComp.tsv";
+
+		int num3D = 0;
+		int num2D = 0;
+
+		float[] sum3D = new float[5];
+		float[] sum2D = new float[5];
+
+		float[] avg3D = new float[5];
+		float[] avg2D = new float[5];
+
+		StringBuilder str3D   = new StringBuilder();
+		StringBuilder str2D   = new StringBuilder();
+		StringBuilder strComp = new StringBuilder();
+
+		for (int i = 0; i < users.Count; i++) {
+			if (users[i].is3D) {
+				num3D++;
+
+				str3D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float grabTime = users[i].sessions[j].oTime;
+					sum3D[j] += grabTime;
+					str3D.Append(grabTime + "\t");
+				}
+				str3D.Append("\n");
+			}
+			else {
+				num2D++;
+
+				str2D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float grabTime = users[i].sessions[j].oTime;
+					sum2D[j] += grabTime;
+					str2D.Append(grabTime + "\t");
+				}
+				str2D.Append("\n");
+
+			}
+		}
+
+		for (int i = 0; i < 5; i++) {
+			avg2D[i] = sum2D[i] / num2D;
+			avg3D[i] = sum3D[i] / num3D;
+		}
+
+		// Append comparisons
+		strComp.Append("2D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg2D[i] + "\t");
+		}
+		strComp.Append("\n3D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg3D[i] + "\t");
+		}
+
+		// Create new files.
+		File.WriteAllText(path3D,   str3D.ToString());
+		File.WriteAllText(path2D,   str2D.ToString());
+		File.WriteAllText(pathComp, strComp.ToString());
+	}
+
+
+	private void PrintHoopTime() {
+		string path3D   = basePath + "/HoopTime3D.tsv";
+		string path2D   = basePath + "/HoopTime2D.tsv";
+		string pathComp = basePath + "/HoopTimeComp.tsv";
+
+		int num3D = 0;
+		int num2D = 0;
+
+		float[] sum3D = new float[5];
+		float[] sum2D = new float[5];
+
+		float[] avg3D = new float[5];
+		float[] avg2D = new float[5];
+
+		StringBuilder str3D   = new StringBuilder();
+		StringBuilder str2D   = new StringBuilder();
+		StringBuilder strComp = new StringBuilder();
+
+		for (int i = 0; i < users.Count; i++) {
+			if (users[i].is3D) {
+				num3D++;
+
+				str3D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].hTime;
+					sum3D[j] += val;
+					str3D.Append(val + "\t");
+				}
+				str3D.Append("\n");
+			}
+			else {
+				num2D++;
+
+				str2D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].hTime;
+					sum2D[j] += val;
+					str2D.Append(val + "\t");
+				}
+				str2D.Append("\n");
+
+			}
+		}
+
+		for (int i = 0; i < 5; i++) {
+			avg2D[i] = sum2D[i] / num2D;
+			avg3D[i] = sum3D[i] / num3D;
+		}
+
+		// Append comparisons
+		strComp.Append("2D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg2D[i] + "\t");
+		}
+		strComp.Append("\n3D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg3D[i] + "\t");
+		}
+
+		// Create new files.
+		File.WriteAllText(path3D,   str3D.ToString());
+		File.WriteAllText(path2D,   str2D.ToString());
+		File.WriteAllText(pathComp, strComp.ToString());
+	}
+
+	private void PrintTargTime() {
+		string path3D   = basePath + "/TargTime3D.tsv";
+		string path2D   = basePath + "/TargTime2D.tsv";
+		string pathComp = basePath + "/TargTimeComp.tsv";
+
+		int num3D = 0;
+		int num2D = 0;
+
+		float[] sum3D = new float[5];
+		float[] sum2D = new float[5];
+
+		float[] avg3D = new float[5];
+		float[] avg2D = new float[5];
+
+		StringBuilder str3D   = new StringBuilder();
+		StringBuilder str2D   = new StringBuilder();
+		StringBuilder strComp = new StringBuilder();
+
+		for (int i = 0; i < users.Count; i++) {
+			if (users[i].is3D) {
+				num3D++;
+
+				str3D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].tTime;
+					sum3D[j] += val;
+					str3D.Append(val + "\t");
+				}
+				str3D.Append("\n");
+			}
+			else {
+				num2D++;
+
+				str2D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].tTime;
+					sum2D[j] += val;
+					str2D.Append(val + "\t");
+				}
+				str2D.Append("\n");
+
+			}
+		}
+
+		for (int i = 0; i < 5; i++) {
+			avg2D[i] = sum2D[i] / num2D;
+			avg3D[i] = sum3D[i] / num3D;
+		}
+
+		// Append comparisons
+		strComp.Append("2D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg2D[i] + "\t");
+		}
+		strComp.Append("\n3D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg3D[i] + "\t");
+		}
+
+		// Create new files.
+		File.WriteAllText(path3D,   str3D.ToString());
+		File.WriteAllText(path2D,   str2D.ToString());
+		File.WriteAllText(pathComp, strComp.ToString());
+	}
+
+
+	private void PrintHoopDist() {
+		string path3D   = basePath + "/HoopDist3D.tsv";
+		string path2D   = basePath + "/HoopDist2D.tsv";
+		string pathComp = basePath + "/HoopDistComp.tsv";
+
+		int num3D = 0;
+		int num2D = 0;
+
+		float[] sum3D = new float[5];
+		float[] sum2D = new float[5];
+
+		float[] avg3D = new float[5];
+		float[] avg2D = new float[5];
+
+		StringBuilder str3D   = new StringBuilder();
+		StringBuilder str2D   = new StringBuilder();
+		StringBuilder strComp = new StringBuilder();
+
+		for (int i = 0; i < users.Count; i++) {
+			if (users[i].is3D) {
+				num3D++;
+
+				str3D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].hDist;
+					sum3D[j] += val;
+					str3D.Append(val + "\t");
+				}
+				str3D.Append("\n");
+			}
+			else {
+				num2D++;
+
+				str2D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].hDist;
+					sum2D[j] += val;
+					str2D.Append(val + "\t");
+				}
+				str2D.Append("\n");
+
+			}
+		}
+
+		for (int i = 0; i < 5; i++) {
+			avg2D[i] = sum2D[i] / num2D;
+			avg3D[i] = sum3D[i] / num3D;
+		}
+
+		// Append comparisons
+		strComp.Append("2D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg2D[i] + "\t");
+		}
+		strComp.Append("\n3D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg3D[i] + "\t");
+		}
+
+		// Create new files.
+		File.WriteAllText(path3D,   str3D.ToString());
+		File.WriteAllText(path2D,   str2D.ToString());
+		File.WriteAllText(pathComp, strComp.ToString());
+	}
+
+	private void PrintTargDist() {
+		string path3D   = basePath + "/TargDist3D.tsv";
+		string path2D   = basePath + "/TargDist2D.tsv";
+		string pathComp = basePath + "/TargDistComp.tsv";
+
+		int num3D = 0;
+		int num2D = 0;
+
+		float[] sum3D = new float[5];
+		float[] sum2D = new float[5];
+
+		float[] avg3D = new float[5];
+		float[] avg2D = new float[5];
+
+		StringBuilder str3D   = new StringBuilder();
+		StringBuilder str2D   = new StringBuilder();
+		StringBuilder strComp = new StringBuilder();
+
+		for (int i = 0; i < users.Count; i++) {
+			if (users[i].is3D) {
+				num3D++;
+
+				str3D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].tDist;
+					sum3D[j] += val;
+					str3D.Append(val + "\t");
+				}
+				str3D.Append("\n");
+			}
+			else {
+				num2D++;
+
+				str2D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].tDist;
+					sum2D[j] += val;
+					str2D.Append(val + "\t");
+				}
+				str2D.Append("\n");
+
+			}
+		}
+
+		for (int i = 0; i < 5; i++) {
+			avg2D[i] = sum2D[i] / num2D;
+			avg3D[i] = sum3D[i] / num3D;
+		}
+
+		// Append comparisons
+		strComp.Append("2D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg2D[i] + "\t");
+		}
+		strComp.Append("\n3D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg3D[i] + "\t");
+		}
+
+		// Create new files.
+		File.WriteAllText(path3D,   str3D.ToString());
+		File.WriteAllText(path2D,   str2D.ToString());
+		File.WriteAllText(pathComp, strComp.ToString());
+	}
+
+	private void PrintRedFrames() {
+		string path3D   = basePath + "/RedFrames3D.tsv";
+		string path2D   = basePath + "/RedFrames2D.tsv";
+		string pathComp = basePath + "/RedFramesComp.tsv";
+
+		int num3D = 0;
+		int num2D = 0;
+
+		float[] sum3D = new float[5];
+		float[] sum2D = new float[5];
+
+		float[] avg3D = new float[5];
+		float[] avg2D = new float[5];
+
+		StringBuilder str3D   = new StringBuilder();
+		StringBuilder str2D   = new StringBuilder();
+		StringBuilder strComp = new StringBuilder();
+
+		for (int i = 0; i < users.Count; i++) {
+			if (users[i].is3D) {
+				num3D++;
+
+				str3D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].framesRed;
+					sum3D[j] += val;
+					str3D.Append(val + "\t");
+				}
+				str3D.Append("\n");
+			}
+			else {
+				num2D++;
+
+				str2D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].framesRed;
+					sum2D[j] += val;
+					str2D.Append(val + "\t");
+				}
+				str2D.Append("\n");
+
+			}
+		}
+
+		for (int i = 0; i < 5; i++) {
+			avg2D[i] = sum2D[i] / num2D;
+			avg3D[i] = sum3D[i] / num3D;
+		}
+
+		// Append comparisons
+		strComp.Append("2D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg2D[i] + "\t");
+		}
+		strComp.Append("\n3D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg3D[i] + "\t");
+		}
+
+		// Create new files.
+		File.WriteAllText(path3D,   str3D.ToString());
+		File.WriteAllText(path2D,   str2D.ToString());
+		File.WriteAllText(pathComp, strComp.ToString());
+	}
+
+	private void PrintAngularDivergence() {
+		PrintForwardAngDiv();
+		PrintUpwardAngDiv();
+	}
+
+	private void PrintForwardAngDiv() {
+		string path3D   = basePath + "/ForwardAngDiv3D.tsv";
+		string path2D   = basePath + "/ForwardAngDiv2D.tsv";
+		string pathComp = basePath + "/ForwardAngDivComp.tsv";
+
+		int num3D = 0;
+		int num2D = 0;
+
+		float[] sum3D = new float[5];
+		float[] sum2D = new float[5];
+
+		float[] avg3D = new float[5];
+		float[] avg2D = new float[5];
+
+		StringBuilder str3D   = new StringBuilder();
+		StringBuilder str2D   = new StringBuilder();
+		StringBuilder strComp = new StringBuilder();
+
+		for (int i = 0; i < users.Count; i++) {
+			if (users[i].is3D) {
+				num3D++;
+
+				str3D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].fDivergence;
+					sum3D[j] += val;
+					str3D.Append(val + "\t");
+				}
+				str3D.Append("\n");
+			}
+			else {
+				num2D++;
+
+				str2D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].fDivergence;
+					sum2D[j] += val;
+					str2D.Append(val + "\t");
+				}
+				str2D.Append("\n");
+
+			}
+		}
+
+		for (int i = 0; i < 5; i++) {
+			avg2D[i] = sum2D[i] / num2D;
+			avg3D[i] = sum3D[i] / num3D;
+		}
+
+		// Append comparisons
+		strComp.Append("2D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg2D[i] + "\t");
+		}
+		strComp.Append("\n3D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg3D[i] + "\t");
+		}
+
+		// Create new files.
+		File.WriteAllText(path3D,   str3D.ToString());
+		File.WriteAllText(path2D,   str2D.ToString());
+		File.WriteAllText(pathComp, strComp.ToString());
+	}
+
+	private void PrintUpwardAngDiv() {
+		string path3D   = basePath + "/UpwardAngDiv3D.tsv";
+		string path2D   = basePath + "/UpwardAngDiv2D.tsv";
+		string pathComp = basePath + "/UpwardAngDivComp.tsv";
+
+		int num3D = 0;
+		int num2D = 0;
+
+		float[] sum3D = new float[5];
+		float[] sum2D = new float[5];
+
+		float[] avg3D = new float[5];
+		float[] avg2D = new float[5];
+
+		StringBuilder str3D   = new StringBuilder();
+		StringBuilder str2D   = new StringBuilder();
+		StringBuilder strComp = new StringBuilder();
+
+		for (int i = 0; i < users.Count; i++) {
+			if (users[i].is3D) {
+				num3D++;
+
+				str3D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].uDivergence;
+					sum3D[j] += val;
+					str3D.Append(val + "\t");
+				}
+				str3D.Append("\n");
+			}
+			else {
+				num2D++;
+
+				str2D.Append(users[i].name + "\t");
+				for (int j = 0; j < 5; j++) {
+					float val = users[i].sessions[j].uDivergence;
+					sum2D[j] += val;
+					str2D.Append(val + "\t");
+				}
+				str2D.Append("\n");
+
+			}
+		}
+
+		for (int i = 0; i < 5; i++) {
+			avg2D[i] = sum2D[i] / num2D;
+			avg3D[i] = sum3D[i] / num3D;
+		}
+
+		// Append comparisons
+		strComp.Append("2D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg2D[i] + "\t");
+		}
+		strComp.Append("\n3D\t");
+		for (int i = 0; i < 5; i++) {
+			strComp.Append(avg3D[i] + "\t");
+		}
+
+		// Create new files.
+		File.WriteAllText(path3D,   str3D.ToString());
+		File.WriteAllText(path2D,   str2D.ToString());
+		File.WriteAllText(pathComp, strComp.ToString());
+	}
+
 }
 
 public class UserData {
-	List<SessionData> summaries = new List<SessionData>();
+	public string name;
+	public bool is3D = false;
+	public List<SessionData> sessions = new List<SessionData>();
 
 	public UserData(string path) {
 		// Navigate to path
 		for (int i = 0; i < 5; i++) {
-		// for (int i = 0; i < 1; i++) {
 			string      dayPath = path + "/Day" + i;
-			SessionData summary = new SessionData(dayPath);
-			Debug.Log("Day " + i + ":\n" + summary.ToString());
+			SessionData session = new SessionData(dayPath);
+			
+			if (session.initialized) {
+				sessions.Add(session);
+			}
 		}
+
+		string infoPath = path + "/info.txt";
+
+		string[] lines;
+		try {
+			lines = File.ReadAllLines(infoPath);
+		}
+		catch(FileNotFoundException) {
+			Debug.Log("user info.txt not found!!!");
+			return;
+		}
+
+		// Check what kind of trial this user is doing
+		string[] cells = lines[1].Split('\t');
+		int use3D = Int32.Parse(cells[1]);
+		if (use3D == 1) {
+			is3D = true;
+		}
+		else {
+			is3D = false;
+		}
+
+		name = (lines[0].Split('\t'))[1];
+
 	}
 }
 
 
 public class SessionData {
-	List<TrialData> trials = new List<TrialData>();
+	public bool initialized = false;
+
+	public List<TrialData> trials = new List<TrialData>();
 
 	public float hDist = 0f; // minimum distance to hoop
 	public float tDist = 0f; // minimum distance to target
@@ -98,6 +676,7 @@ public class SessionData {
 		fDivergence /= trials.Count;
 		uDivergence /= trials.Count;
 
+		initialized = true;
 
 	}
 
@@ -166,7 +745,7 @@ public class TrialData {
 
 
 
-	private List<TrialState> states = new List<TrialState>();
+	public List<TrialState> states = new List<TrialState>();
 
 	// Private empty constructor
 	private TrialData() {
@@ -253,7 +832,7 @@ public class TrialData {
 			mAngle = Single.Parse(cells[42]);
 		}
 		catch {
-			Debug.Log("Line ignored:\n" + line);
+			Debug.Log("Line ignored: " + path + "\n" + line);
 			initialized = false;
 			return;
 		}
