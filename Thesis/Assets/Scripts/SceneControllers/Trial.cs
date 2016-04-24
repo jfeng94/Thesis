@@ -286,7 +286,7 @@ public class Trial : MonoBehaviour {
 
 		line.Append("8. Trigger status\t");
 
-		line.Append("9. SceneObject pos x\t");
+		line.Append(" 9. SceneObject pos x\t");
 		line.Append("10. SceneObject pos y\t");
 		line.Append("11. SceneObject pos z\t");
 		line.Append("12. SceneObject rot x\t");
